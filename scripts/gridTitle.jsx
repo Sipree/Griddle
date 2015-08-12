@@ -61,7 +61,14 @@ var GridTitle = React.createClass({
         var meta = that.props.columnSettings.getColumnMetadataByName(col);
         var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
         var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
+        var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
+        var disp;
+        if(displayComponent != null) {
+            disp = displayComponent;
 
+        } else {
+            disp = displayName;
+        }
         columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
         if (that.props.useGriddleStyles){
@@ -75,7 +82,7 @@ var GridTitle = React.createClass({
           }
         }
 
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{displayName}{sortComponent}</th>);
+        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{disp}{sortComponent}</th>);
     });
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {

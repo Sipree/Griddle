@@ -760,18 +760,24 @@ var Griddle = React.createClass({
         var gridClassName = this.props.gridClassName.length > 0 ? "griddle " + this.props.gridClassName : "griddle";
         //add custom to the class name so we can style it differently
         gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
-
-        if (this.shouldShowNoDataSection(results)) {
-            gridClassName += this.props.noDataClassName&&this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
-            return this.getNoDataSection(gridClassName, topSection);
-        }
+		
+	    var finalResultContent;
+	    if (this.shouldShowNoDataSection(results)) {
+	    	gridClassName += this.props.noDataClassName && this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
+	        finalResultContent = <div className="results">
+					{resultContent}
+					{this.getNoDataSection(gridClassName, topSection)}
+					</div>
+	    } else {
+	    	finalResultContent = resultContent;
+	    }
 
         return (
             <div className={gridClassName}>
                 {topSection}
                 {columnSelector}
                 <div className="griddle-container" style={this.props.useGriddleStyles&&!this.props.isSubGriddle? { border: "1px solid #DDD"} : null }>
-                    {resultContent}
+                    {finalResultContent}
                 </div>
             </div>
         );

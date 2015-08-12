@@ -167,6 +167,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            /* icon components */
 	            sortAscendingComponent: " ▲",
 	            sortDescendingComponent: " ▼",
+	            sortDefaultComponent: null,
 	            parentRowCollapsedComponent: "▶",
 	            parentRowExpandedComponent: "▼",
 	            settingsIconComponent: "",
@@ -345,6 +346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.columnSettings.filteredColumns = nextProps.columns;
 	        }
 
+
 	        if (nextProps.selectedRowIds) {
 	            var visibleRows = this.getDataForRender(this.getCurrentResults(), this.columnSettings.getColumns(), true);
 
@@ -510,7 +512,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortAscendingClassName: this.props.sortAscendingClassName,
 	            sortDescendingClassName: this.props.sortDescendingClassName,
 	            sortAscendingComponent: this.props.sortAscendingComponent,
-	            sortDescendingComponent: this.props.sortDescendingComponent
+	            sortDescendingComponent: this.props.sortDescendingComponent,
+	            sortDefaultComponent: this.props.sortDefaultComponent
 	        };
 	    },
 	    _toggleSelectAll: function () {
@@ -821,9 +824,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //add custom to the class name so we can style it differently
 	        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
+	        var finalResultContent;
 	        if (this.shouldShowNoDataSection(results)) {
 	            gridClassName += this.props.noDataClassName && this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
-	            return this.getNoDataSection(gridClassName, topSection);
+	            finalResultContent = React.createElement(
+	                "div",
+	                { className: "results" },
+	                resultContent,
+	                this.getNoDataSection(gridClassName, topSection)
+	            );
+	        } else {
+	            finalResultContent = resultContent;
 	        }
 
 	        return React.createElement(
@@ -834,7 +845,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            React.createElement(
 	                "div",
 	                { className: "griddle-container", style: this.props.useGriddleStyles && !this.props.isSubGriddle ? { border: "1px solid #DDD" } : null },
-	                resultContent
+	                finalResultContent
 	            )
 	        );
 	    }
@@ -1149,7 +1160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _.each(obj, function (value, key) {
 	    var fullKey = prefix ? prefix + "." + key : key;
 	    if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
-	      keys.push(getKeys(obj[key], fullKey));
+	      keys = keys.concat(getKeys(value, fullKey));
 	    } else {
 	      keys.push(fullKey);
 	    }
@@ -1813,7 +1824,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return React.createElement(
 	            "div",
-	            null,
+	            { className: "noDataMessage" },
 	            this.props.noDataMessage
 	        );
 	    }
@@ -2124,7 +2135,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
 	            var columnSort = "";
-	            var sortComponent = null;
+	            var sortComponent = that.props.sortSettings.sortDefaultComponent;
 
 	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
 	                columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -2138,7 +2149,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
 	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
 	            var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
-
+	            var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
+	            var disp;
+	            if (displayComponent != null) {
+	                disp = displayComponent;
+	            } else {
+	                disp = displayName;
+	            }
 	            columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
 	            if (that.props.useGriddleStyles) {
@@ -2155,7 +2172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return React.createElement(
 	                "th",
 	                { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },
-	                displayName,
+	                disp,
 	                sortComponent
 	            );
 	        });
