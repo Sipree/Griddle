@@ -1,12 +1,13 @@
 var _ = require('underscore');
 
 class ColumnProperties{
-  constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[]){
+  constructor (allColumns = [], filteredColumns=[], childrenColumnName="children", columnMetadata=[], metadataColumns=[], childColumns=[]){
     this.allColumns = allColumns;
     this.filteredColumns = filteredColumns;
     this.childrenColumnName = childrenColumnName;
     this.columnMetadata = columnMetadata;
     this.metadataColumns = metadataColumns;
+	this.childColumns = childColumns;
   }
 
   getMetadataColumns(){
@@ -55,13 +56,16 @@ class ColumnProperties{
     return orderedColumns;
   }
 
-  getColumns(){
+  getColumns(isChild=false){
     //if we didn't set default or filter
-    var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
-
-    filteredColumns = _.difference(filteredColumns, this.metadataColumns);
-
-    filteredColumns = this.orderColumns(filteredColumns);
+	var filteredColumns = null;
+	if(isChild) {
+		filteredColumns = this.childColumns;
+	}  else {
+	    filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
+	    filteredColumns = _.difference(filteredColumns, this.metadataColumns);
+	    filteredColumns = this.orderColumns(filteredColumns);
+	}
 
     return filteredColumns;
   }

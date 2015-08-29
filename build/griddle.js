@@ -116,6 +116,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //this column will determine which column holds subgrid data
 	            //it will be passed through with the data object but will not be rendered
 	            childrenColumnName: "children",
+	            //These next rows are for children properties so we can customize the child data
+	            childColumns: null,
+	            childColumnMetadata: null,
+	            childCustomRowComponent: null,
+	            childUseCustomRowComponent: false,
+	            childCustomRowComponentClassName: null,
+	            childShowHeader: false,
 	            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
 	            metadataColumns: [],
 	            showFilter: false,
@@ -155,6 +162,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            isSubGriddle: false,
 	            enableSort: true,
 	            onRowClick: null,
+	            onAppendClick: null,
 	            /* css class names */
 	            sortAscendingClassName: "sort-ascending",
 	            sortDescendingClassName: "sort-descending",
@@ -376,7 +384,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyExternal();
 	        this.verifyCustom();
 
-	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
+	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns, this.props.childColumns);
 
 	        this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
@@ -743,6 +751,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	                infiniteScrollLoadTreshold: this.props.infiniteScrollLoadTreshold,
 	                externalLoadingComponent: this.props.externalLoadingComponent,
 	                externalIsLoading: this.props.externalIsLoading,
+	                childColumns: this.props.childColumns,
+	                childColumnMetadata: this.props.childColumnMetadata,
+	                childCustomRowComponent: this.props.childCustomRowComponent,
+	                childUseCustomRowComponent: this.props.childUseCustomRowComponent,
+	                childCustomRowComponentClassName: this.props.childCustomRowComponentClassName,
+	                childShowHeader: this.props.childShowHeader,
 	                hasMorePages: hasMorePages,
 	                onRowClick: this.props.onRowClick })
 	        );
@@ -884,6 +898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var childrenColumnName = arguments[2] === undefined ? "children" : arguments[2];
 	    var columnMetadata = arguments[3] === undefined ? [] : arguments[3];
 	    var metadataColumns = arguments[4] === undefined ? [] : arguments[4];
+	    var childColumns = arguments[5] === undefined ? [] : arguments[5];
 	    _classCallCheck(this, ColumnProperties);
 
 	    this.allColumns = allColumns;
@@ -891,6 +906,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.childrenColumnName = childrenColumnName;
 	    this.columnMetadata = columnMetadata;
 	    this.metadataColumns = metadataColumns;
+	    this.childColumns = childColumns;
 	  }
 
 	  _prototypeProperties(ColumnProperties, null, {
@@ -962,12 +978,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    getColumns: {
 	      value: function getColumns() {
+	        var isChild = arguments[0] === undefined ? false : arguments[0];
 	        //if we didn't set default or filter
-	        var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
-
-	        filteredColumns = _.difference(filteredColumns, this.metadataColumns);
-
-	        filteredColumns = this.orderColumns(filteredColumns);
+	        var filteredColumns = null;
+	        if (isChild) {
+	          filteredColumns = this.childColumns;
+	        } else {
+	          filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
+	          filteredColumns = _.difference(filteredColumns, this.metadataColumns);
+	          filteredColumns = this.orderColumns(filteredColumns);
+	        }
 
 	        return filteredColumns;
 	      },
@@ -1324,6 +1344,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
+	          childColumns: that.props.childColumns,
+	          childColumnMetadata: that.props.childColumnMetadata,
+	          childCustomRowComponent: that.props.childCustomRowComponent,
+	          childUseCustomRowComponent: that.props.childUseCustomRowComponent,
+	          childCustomRowComponentClassName: that.props.childCustomRowComponentClassName,
+	          childShowHeader: that.props.childShowHeader,
 	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
 	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
 	          data: row, key: uniqueId + "-container", uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
@@ -1931,11 +1957,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //todo: Make this not as ridiculous looking
 	            var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
 	                "span",
-	                { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
+	                { onClick: _this.props.toggleChildren, className: "childToggle", style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
 	                _this.props.parentRowCollapsedComponent
 	            ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
 	                "span",
-	                { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
+	                { onClick: _this.props.toggleChildren, className: "childToggle", style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
 	                _this.props.parentRowExpandedComponent
 	            ) : "";
 
@@ -1948,6 +1974,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                returnValue = meta == null ? returnValue : React.createElement(
 	                    "td",
 	                    { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
+	                    firstColAppend,
 	                    colData
 	                );
 	            }
@@ -2266,6 +2293,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var arr = [];
 
 	    var columns = this.props.columnSettings.getColumns();
+	    var childMetadata = this.props.childColumnMetadata != null ? this.props.childColumnMetadata : this.props.columnMetadata;
+	    var childColumns = this.props.childColumns != null ? this.props.childColumns : that.props.columnSettings.getColumns();
+	    var childCustomRowComponent = this.props.childCustomRowComponent != null ? this.props.childCustomRowComponent : null;
+	    var childCustomRowComponentClassName = this.props.childCustomRowComponentClassName;
+	    var childUseCustomRowComponent = this.props.childUseCustomRowComponent; // default will be false if not specified
+
+
 
 	    arr.push(React.createElement(this.props.rowSettings.rowComponent, {
 	      useGriddleStyles: this.props.useGriddleStyles,
@@ -2300,9 +2334,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            React.createElement(
 	              "td",
 	              { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: "griddle-parent", style: that.props.useGriddleStyles ? { border: "none", padding: "0 0 0 5px" } : null },
-	              React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	              React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: childColumns,
+	                tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
 	                parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	                showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata,
+	                useCustomRowComponent: childUseCustomRowComponent,
+	                customRowComponent: childCustomRowComponent,
+	                customRowComponentClassName: childCustomRowComponentClassName,
+	                showTableHeading: that.props.childShowHeader, showPager: false, columnMetadata: childMetadata,
 	                parentRowExpandedComponent: that.props.parentRowExpandedComponent,
 	                parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
 	                paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })

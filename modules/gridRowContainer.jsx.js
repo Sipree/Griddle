@@ -56,6 +56,13 @@ var GridRowContainer = React.createClass({
     var arr = [];
 
     var columns = this.props.columnSettings.getColumns();
+    var childMetadata = this.props.childColumnMetadata != null ? this.props.childColumnMetadata : this.props.columnMetadata;
+    var childColumns = this.props.childColumns != null ? this.props.childColumns : that.props.columnSettings.getColumns();
+    var childCustomRowComponent = this.props.childCustomRowComponent != null ? this.props.childCustomRowComponent : null;
+    var childCustomRowComponentClassName = this.props.childCustomRowComponentClassName;
+    var childUseCustomRowComponent = this.props.childUseCustomRowComponent; // default will be false if not specified
+
+
 
     arr.push(React.createElement(this.props.rowSettings.rowComponent, {
       useGriddleStyles: this.props.useGriddleStyles,
@@ -90,9 +97,13 @@ var GridRowContainer = React.createClass({
             React.createElement(
               "td",
               { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: "griddle-parent", style: that.props.useGriddleStyles ? { border: "none", padding: "0 0 0 5px" } : null },
-              React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: that.props.columnSettings.getColumns(), tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+              React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: childColumns,
+                tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
                 parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-                showTableHeading: false, showPager: false, columnMetadata: that.props.columnMetadata,
+                useCustomRowComponent: childUseCustomRowComponent,
+                customRowComponent: childCustomRowComponent,
+                customRowComponentClassName: childCustomRowComponentClassName,
+                showTableHeading: that.props.childShowHeader, showPager: false, columnMetadata: childMetadata,
                 parentRowExpandedComponent: that.props.parentRowExpandedComponent,
                 parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
                 paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })

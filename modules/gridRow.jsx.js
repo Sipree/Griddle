@@ -93,11 +93,11 @@ var GridRow = React.createClass({
             //todo: Make this not as ridiculous looking
             var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement(
                 "span",
-                { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
+                { onClick: _this.props.toggleChildren, className: "childToggle", style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null },
                 _this.props.parentRowCollapsedComponent
             ) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement(
                 "span",
-                { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
+                { onClick: _this.props.toggleChildren, className: "childToggle", style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null },
                 _this.props.parentRowExpandedComponent
             ) : "";
 
@@ -110,6 +110,7 @@ var GridRow = React.createClass({
                 returnValue = meta == null ? returnValue : React.createElement(
                     "td",
                     { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles },
+                    firstColAppend,
                     colData
                 );
             }

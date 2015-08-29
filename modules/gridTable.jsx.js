@@ -143,6 +143,12 @@ var GridTable = React.createClass({
         }
 
         return React.createElement(GridRowContainer, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle,
+          childColumns: that.props.childColumns,
+          childColumnMetadata: that.props.childColumnMetadata,
+          childCustomRowComponent: that.props.childCustomRowComponent,
+          childUseCustomRowComponent: that.props.childUseCustomRowComponent,
+          childCustomRowComponentClassName: that.props.childCustomRowComponentClassName,
+          childShowHeader: that.props.childShowHeader,
           parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
           parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
           data: row, key: uniqueId + "-container", uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,

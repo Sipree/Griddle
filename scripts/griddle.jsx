@@ -50,6 +50,13 @@ var Griddle = React.createClass({
             //this column will determine which column holds subgrid data
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
+			//These next rows are for children properties so we can customize the child data
+			"childColumns": null,
+			"childColumnMetadata": null,
+			"childCustomRowComponent": null,
+			"childUseCustomRowComponent": false,
+            "childCustomRowComponentClassName": null,
+            "childShowHeader": false,
             //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
             "metadataColumns": [],
             "showFilter": false,
@@ -89,6 +96,7 @@ var Griddle = React.createClass({
             "isSubGriddle": false,
             "enableSort": true,
             "onRowClick": null,
+            "onAppendClick": null,
             /* css class names */
             "sortAscendingClassName": "sort-ascending",
             "sortDescendingClassName": "sort-descending",
@@ -312,7 +320,8 @@ var Griddle = React.createClass({
             this.props.columns,
             this.props.childrenColumnName,
             this.props.columnMetadata,
-            this.props.metadataColumns
+            this.props.metadataColumns,
+			this.props.childColumns
         );
 
         this.rowSettings = new RowProperties(
@@ -686,6 +695,12 @@ var Griddle = React.createClass({
                 infiniteScrollLoadTreshold={this.props.infiniteScrollLoadTreshold}
                 externalLoadingComponent={this.props.externalLoadingComponent}
                 externalIsLoading={this.props.externalIsLoading}
+                childColumns={this.props.childColumns}
+                childColumnMetadata={this.props.childColumnMetadata}
+			    childCustomRowComponent={this.props.childCustomRowComponent}
+			    childUseCustomRowComponent={this.props.childUseCustomRowComponent}
+                childCustomRowComponentClassName={this.props.childCustomRowComponentClassName}
+                childShowHeader={this.props.childShowHeader}
                 hasMorePages={hasMorePages}
                 onRowClick={this.props.onRowClick}/></div>)
     },

@@ -13,6 +13,7 @@ var ColumnProperties = (function () {
     var childrenColumnName = arguments[2] === undefined ? "children" : arguments[2];
     var columnMetadata = arguments[3] === undefined ? [] : arguments[3];
     var metadataColumns = arguments[4] === undefined ? [] : arguments[4];
+    var childColumns = arguments[5] === undefined ? [] : arguments[5];
     _classCallCheck(this, ColumnProperties);
 
     this.allColumns = allColumns;
@@ -20,6 +21,7 @@ var ColumnProperties = (function () {
     this.childrenColumnName = childrenColumnName;
     this.columnMetadata = columnMetadata;
     this.metadataColumns = metadataColumns;
+    this.childColumns = childColumns;
   }
 
   _prototypeProperties(ColumnProperties, null, {
@@ -91,12 +93,16 @@ var ColumnProperties = (function () {
     },
     getColumns: {
       value: function getColumns() {
+        var isChild = arguments[0] === undefined ? false : arguments[0];
         //if we didn't set default or filter
-        var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
-
-        filteredColumns = _.difference(filteredColumns, this.metadataColumns);
-
-        filteredColumns = this.orderColumns(filteredColumns);
+        var filteredColumns = null;
+        if (isChild) {
+          filteredColumns = this.childColumns;
+        } else {
+          filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
+          filteredColumns = _.difference(filteredColumns, this.metadataColumns);
+          filteredColumns = this.orderColumns(filteredColumns);
+        }
 
         return filteredColumns;
       },
