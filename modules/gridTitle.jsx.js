@@ -62,6 +62,7 @@ var GridTitle = React.createClass({
 
             var meta = that.props.columnSettings.getColumnMetadataByName(col);
             var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+            var columnStyle = that.props.columnSettings.getMetadataColumnProperty(col, "columnStyle", {});
             var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
             var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
             var disp;
@@ -81,8 +82,10 @@ var GridTitle = React.createClass({
                     padding: "5px",
                     cursor: columnIsSortable ? "pointer" : "default"
                 };
+                titleStyles = this.merge_options(titleStyles, columnStyle);
+            } else {
+                titleStyles = columnStyle;
             }
-
             return React.createElement(
                 "th",
                 { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },

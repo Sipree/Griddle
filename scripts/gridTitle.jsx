@@ -80,10 +80,12 @@ var GridTitle = React.createClass({
             color: "#222",
             padding: "5px",
             cursor: columnIsSortable ? "pointer" : "default"
-          }
+          };
+            titleStyles = this.merge_options(titleStyles, columnStyle);
+        } else {
+            titleStyles = columnStyle;
         }
-
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} style={columnStyle} className={columnSort} key={displayName} style={titleStyles}>{disp}{sortComponent}</th>);
+        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col}  className={columnSort} key={displayName} style={titleStyles}>{disp}{sortComponent}</th>);
     });
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {

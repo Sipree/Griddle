@@ -116,6 +116,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //this column will determine which column holds subgrid data
 	            //it will be passed through with the data object but will not be rendered
 	            childrenColumnName: "children",
+	            tableHeadStyle: null,
 	            //These next rows are for children properties so we can customize the child data
 	            childColumns: null,
 	            childColumnMetadata: null,
@@ -739,6 +740,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                className: this.props.tableClassName,
 	                enableInfiniteScroll: this.isInfiniteScrollEnabled(),
 	                nextPage: this.nextPage,
+	                tableHeadStyle: this.props.tableHeadStyle,
 	                showTableHeading: this.props.showTableHeading,
 	                useFixedHeader: this.props.useFixedHeader,
 	                parentRowCollapsedClassName: this.props.parentRowCollapsedClassName,
@@ -1331,7 +1333,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
 	        aboveSpacerRow = React.createElement("tr", { key: "above-" + aboveSpacerRowStyle.height, style: aboveSpacerRowStyle });
 	        var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + "px" };
-	        belowSpacerRow = React.createElement("tr", { key: "below-" + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
+	        //belowSpacerRow = (<tr key={'below-' + belowSpacerRowStyle.height} style={belowSpacerRowStyle}></tr>);
 	      }
 
 	      var nodes = nodeData.map(function (row, index) {
@@ -1373,10 +1375,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      return null;
 	    }
+	  }, /**
+	     * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+	     * @param obj1
+	     * @param obj2
+	     * @returns obj3 a new object based on obj1 and obj2
+	     */
+	  merge_options: function (obj1, obj2) {
+	    var obj3 = {};
+	    for (var attrname in obj1) {
+	      obj3[attrname] = obj1[attrname];
+	    }
+	    for (var attrname in obj2) {
+	      obj3[attrname] = obj2[attrname];
+	    }
+	    return obj3;
 	  },
 	  render: function () {
 	    var that = this;
 	    var nodes = [];
+
+	    var tableHeadStyle = this.props.useGriddleStyles && tableStyle || null;
+	    if (this.props.tableHeadStyle != null) {
+	      tableHeadStyle = tableHeadStyle == null ? this.props.tableHeadStyle : this.merge_options(tableHeadStyle, this.props.tableHeadStyle);
+	    }
+
 
 	    // for if we need to wrap the group in one tbody or many
 	    var anyHasChildren = false;
@@ -1493,7 +1516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        null,
 	        React.createElement(
 	          "table",
-	          { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null },
+	          { className: this.props.className, style: tableHeadStyle },
 	          tableHeading
 	        ),
 	        React.createElement(
@@ -2175,6 +2198,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
 	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+	            var columnStyle = that.props.columnSettings.getMetadataColumnProperty(col, "columnStyle", {});
 	            var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
 	            var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
 	            var disp;
@@ -2194,8 +2218,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    padding: "5px",
 	                    cursor: columnIsSortable ? "pointer" : "default"
 	                };
+	                titleStyles = this.merge_options(titleStyles, columnStyle);
+	            } else {
+	                titleStyles = columnStyle;
 	            }
-
 	            return React.createElement(
 	                "th",
 	                { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },
