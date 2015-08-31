@@ -60,6 +60,7 @@ var GridTitle = React.createClass({
 
         var meta = that.props.columnSettings.getColumnMetadataByName(col);
         var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+        var columnStyle = that.props.columnSettings.getMetadataColumnProperty(col, "columnStyle", {});
         var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
         var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
         var disp;
@@ -82,7 +83,7 @@ var GridTitle = React.createClass({
           }
         }
 
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>{disp}{sortComponent}</th>);
+        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} style={columnStyle} className={columnSort} key={displayName} style={titleStyles}>{disp}{sortComponent}</th>);
     });
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {

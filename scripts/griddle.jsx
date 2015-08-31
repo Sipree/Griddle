@@ -50,6 +50,7 @@ var Griddle = React.createClass({
             //this column will determine which column holds subgrid data
             //it will be passed through with the data object but will not be rendered
             "childrenColumnName": "children",
+            tableHeadStyle: null,
 			//These next rows are for children properties so we can customize the child data
 			"childColumns": null,
 			"childColumnMetadata": null,
@@ -683,6 +684,7 @@ var Griddle = React.createClass({
                 className={this.props.tableClassName}
                 enableInfiniteScroll={this.isInfiniteScrollEnabled()}
                 nextPage={this.nextPage}
+                tableHeadStyle={this.props.tableHeadStyle}
                 showTableHeading={this.props.showTableHeading}
                 useFixedHeader={this.props.useFixedHeader}
                 parentRowCollapsedClassName={this.props.parentRowCollapsedClassName}

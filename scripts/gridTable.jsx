@@ -174,6 +174,12 @@ var GridTable = React.createClass({
     var that = this;
     var nodes = [];
 
+    var tableHeadStyle = this.props.useGriddleStyles && tableStyle || null;
+    if (this.props.tableHeadStyle != null) {
+      tableHeadStyle = (tableHeadStyle == null) ? this.props.tableHeadStyle : this.merge_options(tableHeadStyle, this.props.tableHeadStyle)
+    }
+
+
     // for if we need to wrap the group in one tbody or many
     var anyHasChildren = false;
 
@@ -263,7 +269,7 @@ var GridTable = React.createClass({
       }
 
       return <div>
-              <table className={this.props.className} style={(this.props.useGriddleStyles&&tableStyle)||null}>
+              <table className={this.props.className} style={tableHeadStyle}>
                 {tableHeading}
               </table>
               <div ref="scrollable" onScroll={this.gridScroll} style={gridStyle}>
