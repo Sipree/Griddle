@@ -117,6 +117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //it will be passed through with the data object but will not be rendered
 	            childrenColumnName: "children",
 	            tableHeadStyle: null,
+	            searchIcon: false,
 	            //These next rows are for children properties so we can customize the child data
 	            childColumns: null,
 	            childColumnMetadata: null,
@@ -646,7 +647,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function () {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
 	    },
 	    getSettings: function () {
 	        return this.props.showSettings ? React.createElement(
@@ -1565,17 +1566,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    displayName: "GridFilter",
 	    getDefaultProps: function () {
 	        return {
-	            placeholderText: ""
+	            placeholderText: "",
+	            searchIcon: false
 	        };
 	    },
 	    handleChange: function (event) {
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function () {
+	        var searchIcon = null;
+	        if (this.props.searchIcon) {
+	            searchIcon = React.createElement("span", { "class": "glyphicon glyphicon-search" });
+	        }
 	        return React.createElement(
 	            "div",
 	            { className: "filter-container" },
-	            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange })
+	            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }),
+	            searchIcon
 	        );
 	    }
 	});

@@ -9,17 +9,23 @@ var GridFilter = React.createClass({
     displayName: "GridFilter",
     getDefaultProps: function () {
         return {
-            placeholderText: ""
+            placeholderText: "",
+            searchIcon: false
         };
     },
     handleChange: function (event) {
         this.props.changeFilter(event.target.value);
     },
     render: function () {
+        var searchIcon = null;
+        if (this.props.searchIcon) {
+            searchIcon = React.createElement("span", { "class": "glyphicon glyphicon-search" });
+        }
         return React.createElement(
             "div",
             { className: "filter-container" },
-            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange })
+            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }),
+            searchIcon
         );
     }
 });

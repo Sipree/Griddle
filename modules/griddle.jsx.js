@@ -54,6 +54,7 @@ var Griddle = React.createClass({
             //it will be passed through with the data object but will not be rendered
             childrenColumnName: "children",
             tableHeadStyle: null,
+            searchIcon: false,
             //These next rows are for children properties so we can customize the child data
             childColumns: null,
             childColumnMetadata: null,
@@ -583,7 +584,7 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function () {
-        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
+        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
     },
     getSettings: function () {
         return this.props.showSettings ? React.createElement(
