@@ -10,8 +10,7 @@ var GridFilter = React.createClass({
     getDefaultProps: function () {
         return {
             placeholderText: "",
-            searchIcon: false,
-            searchStyle: {}
+            searchIcon: false
         };
     },
     handleChange: function (event) {
@@ -24,7 +23,7 @@ var GridFilter = React.createClass({
         }
         return React.createElement(
             "div",
-            { style: this.props.searchStyle, className: "filter-container" },
+            { className: "filter-container" },
             React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }),
             searchIcon
         );

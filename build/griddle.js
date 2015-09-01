@@ -71,17 +71,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTable = __webpack_require__(7);
-	var GridFilter = __webpack_require__(8);
-	var GridPagination = __webpack_require__(9);
-	var GridSettings = __webpack_require__(10);
-	var GridNoData = __webpack_require__(11);
-	var GridRow = __webpack_require__(12);
-	var CustomRowComponentContainer = __webpack_require__(13);
-	var CustomPaginationContainer = __webpack_require__(14);
+	var GridTable = __webpack_require__(8);
+	var GridFilter = __webpack_require__(9);
+	var GridPagination = __webpack_require__(10);
+	var GridSettings = __webpack_require__(11);
+	var GridNoData = __webpack_require__(12);
+	var GridRow = __webpack_require__(13);
+	var CustomRowComponentContainer = __webpack_require__(14);
+	var CustomPaginationContainer = __webpack_require__(15);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
 	var deep = __webpack_require__(6);
+	var utils = __webpack_require__(7);
 	var _ = __webpack_require__(3);
 
 	var Griddle = React.createClass({
@@ -673,6 +674,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            settingsStyles = this.getSettingsStyles();
 
 	            topContainerStyles = this.getClearFixStyles();
+	            utils.merge_options(this.props.searchStyle, filterStyles);
+	        } else {
+	            filterStyles = this.props.searchStyle;
 	        }
 
 	        return React.createElement(
@@ -1205,14 +1209,40 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
+	module.exports = {
+	    /**
+	     * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
+	     * @param obj1
+	     * @param obj2
+	     * @returns obj3 a new object based on obj1 and obj2
+	     */
+	    merge_options: function (obj1, obj2) {
+	        var obj3 = {};
+	        for (var attrname in obj1) {
+	            obj3[attrname] = obj1[attrname];
+	        }
+	        for (var attrname in obj2) {
+	            obj3[attrname] = obj2[attrname];
+	        }
+	        return obj3;
+	    }
+	};
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
 	/*
 	   See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 	*/
 	var React = __webpack_require__(2);
-	var GridTitle = __webpack_require__(15);
-	var GridRowContainer = __webpack_require__(16);
+	var GridTitle = __webpack_require__(16);
+	var GridRowContainer = __webpack_require__(17);
 	var ColumnProperties = __webpack_require__(4);
 	var RowProperties = __webpack_require__(5);
+	var utils = __webpack_require__(7);
 	var _ = __webpack_require__(3);
 
 	var GridTable = React.createClass({
@@ -1377,21 +1407,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    } else {
 	      return null;
 	    }
-	  }, /**
-	     * Overwrites obj1's values with obj2's and adds obj2's if non existent in obj1
-	     * @param obj1
-	     * @param obj2
-	     * @returns obj3 a new object based on obj1 and obj2
-	     */
-	  merge_options: function (obj1, obj2) {
-	    var obj3 = {};
-	    for (var attrname in obj1) {
-	      obj3[attrname] = obj1[attrname];
-	    }
-	    for (var attrname in obj2) {
-	      obj3[attrname] = obj2[attrname];
-	    }
-	    return obj3;
 	  },
 	  render: function () {
 	    var that = this;
@@ -1399,7 +1414,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    var tableHeadStyle = this.props.useGriddleStyles && tableStyle || null;
 	    if (this.props.tableHeadStyle != null) {
-	      tableHeadStyle = tableHeadStyle == null ? this.props.tableHeadStyle : this.merge_options(tableHeadStyle, this.props.tableHeadStyle);
+	      tableHeadStyle = tableHeadStyle == null ? this.props.tableHeadStyle : utils.merge_options(tableHeadStyle, this.props.tableHeadStyle);
 	    }
 
 
@@ -1553,7 +1568,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTable;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1568,8 +1583,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getDefaultProps: function () {
 	        return {
 	            placeholderText: "",
-	            searchIcon: false,
-	            searchStyle: {}
+	            searchIcon: false
 	        };
 	    },
 	    handleChange: function (event) {
@@ -1582,7 +1596,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return React.createElement(
 	            "div",
-	            { style: this.props.searchStyle, className: "filter-container" },
+	            { className: "filter-container" },
 	            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }),
 	            searchIcon
 	        );
@@ -1592,7 +1606,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridFilter;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1701,7 +1715,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridPagination;
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1860,7 +1874,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridSettings;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -1891,7 +1905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridNoData;
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2052,7 +2066,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridRow;
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2100,7 +2114,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomRowComponentContainer;
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2140,7 +2154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = CustomPaginationContainer;
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -2150,6 +2164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	*/
 	var React = __webpack_require__(2);
 	var _ = __webpack_require__(3);
+	var utils = __webpack_require__(7);
 	var ColumnProperties = __webpack_require__(4);
 
 	var GridTitle = React.createClass({
@@ -2227,7 +2242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    padding: "5px",
 	                    cursor: columnIsSortable ? "pointer" : "default"
 	                };
-	                titleStyles = this.merge_options(titleStyles, columnStyle);
+	                titleStyles = utils.merge_options(titleStyles, columnStyle);
 	            } else {
 	                titleStyles = columnStyle;
 	            }
@@ -2267,7 +2282,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = GridTitle;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

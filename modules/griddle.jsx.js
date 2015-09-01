@@ -19,6 +19,7 @@ var CustomPaginationContainer = require("./customPaginationContainer.jsx");
 var ColumnProperties = require("./columnProperties");
 var RowProperties = require("./rowProperties");
 var deep = require("./deep");
+var utils = require("./utils");
 var _ = require("underscore");
 
 var Griddle = React.createClass({
@@ -610,6 +611,9 @@ var Griddle = React.createClass({
             settingsStyles = this.getSettingsStyles();
 
             topContainerStyles = this.getClearFixStyles();
+            utils.merge_options(this.props.searchStyle, filterStyles);
+        } else {
+            filterStyles = this.props.searchStyle;
         }
 
         return React.createElement(
