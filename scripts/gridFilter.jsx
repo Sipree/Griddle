@@ -16,7 +16,7 @@ var GridFilter = React.createClass({
     render: function(){
         var searchIcon = null;
         if (this.props.searchIcon) {
-            searchIcon =  <span class="glyphicon glyphicon-search"></span>
+            searchIcon =  <span className="glyphicon glyphicon-search"></span>
         }
         return <div className="filter-container">
             <input type="text" name="filter" placeholder={this.props.placeholderText} className="form-control" onChange={this.handleChange} />

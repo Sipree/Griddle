@@ -1576,7 +1576,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function () {
 	        var searchIcon = null;
 	        if (this.props.searchIcon) {
-	            searchIcon = React.createElement("span", { "class": "glyphicon glyphicon-search" });
+	            searchIcon = React.createElement("span", { className: "glyphicon glyphicon-search" });
 	        }
 	        return React.createElement(
 	            "div",
