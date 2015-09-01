@@ -5,7 +5,6 @@
 */
 var React = require("react");
 var _ = require("underscore");
-var utils = require("./utils");
 var ColumnProperties = require("./columnProperties.js");
 
 var GridTitle = React.createClass({
@@ -83,7 +82,7 @@ var GridTitle = React.createClass({
                     padding: "5px",
                     cursor: columnIsSortable ? "pointer" : "default"
                 };
-                titleStyles = utils.merge_options(titleStyles, columnStyle);
+                titleStyles = _.extend(columnStyle, titleStyles);
             } else {
                 titleStyles = columnStyle;
             }

@@ -7,6 +7,10 @@ var ColumnProperties = require('./columnProperties.js');
 var deep = require('./deep.js');
 
 var GridRow = React.createClass({
+    getInitialState: function() {
+        return { comparisorStyle: ''};
+    },
+
     getDefaultProps: function(){
       return {
         "isChildRow": false,
@@ -85,6 +89,14 @@ var GridRow = React.createClass({
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
+            //We want to pass in a meta compaisor and if ps
+            if(meta.hasOwnProperty("comparisor")) {
+                if(meta.comparisor(col[1])) {
+                    this.setState({'comparisorStyle': meta.comparisorStyle});
+                } else if(this.state.comparisorStyle.length > 0) {
+                    this.setState({'comparisorStyle': ''});
+                }
+            }
 
             //todo: Make this not as ridiculous looking
             var firstColAppend = index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons ?
@@ -125,6 +137,9 @@ var GridRow = React.createClass({
             className = "child-row";
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+        }
+        if(that.state.comparisorStyle.length > 0) {
+            className += " " + that.state.comparisorStyle;
         }
         return (<tr onClick={this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null} className={className}>{nodes}</tr>);
     }

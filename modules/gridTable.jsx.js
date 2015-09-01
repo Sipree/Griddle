@@ -8,7 +8,6 @@ var GridTitle = require("./gridTitle.jsx");
 var GridRowContainer = require("./gridRowContainer.jsx");
 var ColumnProperties = require("./columnProperties.js");
 var RowProperties = require("./rowProperties.js");
-var utils = require("./utils");
 var _ = require("underscore");
 
 var GridTable = React.createClass({
@@ -180,7 +179,7 @@ var GridTable = React.createClass({
 
     var tableHeadStyle = this.props.useGriddleStyles && tableStyle || null;
     if (this.props.tableHeadStyle != null) {
-      tableHeadStyle = tableHeadStyle == null ? this.props.tableHeadStyle : utils.merge_options(tableHeadStyle, this.props.tableHeadStyle);
+      tableHeadStyle = tableHeadStyle == null ? this.props.tableHeadStyle : _.extend(tableHeadStyle, this.props.tableHeadStyle);
     }
 
 
