@@ -55,6 +55,7 @@ var Griddle = React.createClass({
             childrenColumnName: "children",
             tableHeadStyle: null,
             searchIcon: false,
+            searchStyle: {},
             //These next rows are for children properties so we can customize the child data
             childColumns: null,
             childColumnMetadata: null,
@@ -584,7 +585,7 @@ var Griddle = React.createClass({
         };
     },
     getFilter: function () {
-        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
+        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, searchStyle: this.props.searchStyle, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
     },
     getSettings: function () {
         return this.props.showSettings ? React.createElement(

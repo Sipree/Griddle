@@ -118,6 +118,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            childrenColumnName: "children",
 	            tableHeadStyle: null,
 	            searchIcon: false,
+	            searchStyle: {},
 	            //These next rows are for children properties so we can customize the child data
 	            childColumns: null,
 	            childColumnMetadata: null,
@@ -647,7 +648,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function () {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? React.createElement(GridFilter, { changeFilter: this.setFilter, searchStyle: this.props.searchStyle, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
 	    },
 	    getSettings: function () {
 	        return this.props.showSettings ? React.createElement(
@@ -1567,7 +1568,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    getDefaultProps: function () {
 	        return {
 	            placeholderText: "",
-	            searchIcon: false
+	            searchIcon: false,
+	            searchStyle: {}
 	        };
 	    },
 	    handleChange: function (event) {
@@ -1580,7 +1582,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return React.createElement(
 	            "div",
-	            { className: "filter-container" },
+	            { style: this.props.searchStyle, className: "filter-container" },
 	            React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }),
 	            searchIcon
 	        );
