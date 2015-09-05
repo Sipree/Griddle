@@ -1898,7 +1898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var GridRow = React.createClass({
 	    displayName: "GridRow",
 	    getInitialState: function () {
-	        return { comparisorStyle: "" };
+	        return { comparatorStyle: "" };
 	    },
 	    componentWillMount: function () {
 	        var _this = this;
@@ -1920,12 +1920,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var nodes = data.map(function (col, index) {
 	            var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
-	            //We want to pass in a meta compaisor and if ps
-	            if (meta.hasOwnProperty("comparisor")) {
-	                if (meta.comparisor(col[1])) {
-	                    _this.setState({ comparisorStyle: meta.comparisorStyle });
-	                } else if (_this.state.comparisorStyle.length > 0) {
-	                    _this.setState({ comparisorStyle: "" });
+	            //We want to pass in a meta comparator and if ps
+	            if (meta.hasOwnProperty("comparator")) {
+	                if (meta.comparator(col[1])) {
+	                    _this.setState({ comparatorStyle: meta.comparatorStyle });
+	                } else if (_this.state.comparatorStyle.length > 0) {
+	                    _this.setState({ comparatorStyle: "" });
 	                }
 	            }
 	        });
@@ -2066,8 +2066,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        } else if (that.props.hasChildren) {
 	            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
 	        }
-	        if (that.state.comparisorStyle.length > 0) {
-	            className += " " + that.state.comparisorStyle;
+	        if (that.state.comparatorStyle.length > 0) {
+	            className += " " + that.state.comparatorStyle;
 	        }
 	        return React.createElement(
 	            "tr",

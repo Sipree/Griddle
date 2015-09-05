@@ -8,7 +8,7 @@ var deep = require('./deep.js');
 
 var GridRow = React.createClass({
     getInitialState: function() {
-        return { comparisorStyle: ''};
+        return { comparatorStyle: ''};
     },
     componentWillMount: function() {
 
@@ -29,12 +29,12 @@ var GridRow = React.createClass({
         var nodes = data.map((col, index) => {
 
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
-            //We want to pass in a meta compaisor and if ps
-            if(meta.hasOwnProperty("comparisor")) {
-                if(meta.comparisor(col[1])) {
-                    this.setState({'comparisorStyle': meta.comparisorStyle});
-                } else if(this.state.comparisorStyle.length > 0) {
-                    this.setState({'comparisorStyle': ''});
+            //We want to pass in a meta comparator and if ps
+            if(meta.hasOwnProperty("comparator")) {
+                if(meta.comparator(col[1])) {
+                    this.setState({'comparatorStyle': meta.comparatorStyle});
+                } else if(this.state.comparatorStyle.length > 0) {
+                    this.setState({'comparatorStyle': ''});
                 }
             }
         });
@@ -160,8 +160,8 @@ var GridRow = React.createClass({
         } else if (that.props.hasChildren){
             className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
         }
-        if(that.state.comparisorStyle.length > 0) {
-            className += " " + that.state.comparisorStyle;
+        if(that.state.comparatorStyle.length > 0) {
+            className += " " + that.state.comparatorStyle;
         }
         return (<tr onClick={this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null} className={className}>{nodes}</tr>);
     }
