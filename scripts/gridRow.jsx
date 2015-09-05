@@ -10,7 +10,36 @@ var GridRow = React.createClass({
     getInitialState: function() {
         return { comparisorStyle: ''};
     },
+    componentWillMount: function() {
 
+        var that = this;
+        var columns = this.props.columnSettings.getColumns();
+
+        // make sure that all the columns we need have default empty values
+        // otherwise they will get clipped
+        var defaults = _.object(columns, []);
+
+        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+        var dataView = Object.create(this.props.data);
+
+        _.defaults(dataView, defaults);
+
+        var data = _.pairs(deep.pick(dataView, columns));
+
+        var nodes = data.map((col, index) => {
+
+            var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
+            //We want to pass in a meta compaisor and if ps
+            if(meta.hasOwnProperty("comparisor")) {
+                if(meta.comparisor(col[1])) {
+                    this.setState({'comparisorStyle': meta.comparisorStyle});
+                } else if(this.state.comparisorStyle.length > 0) {
+                    this.setState({'comparisorStyle': ''});
+                }
+            }
+        });
+
+    },
     getDefaultProps: function(){
       return {
         "isChildRow": false,
@@ -89,14 +118,7 @@ var GridRow = React.createClass({
         var nodes = data.map((col, index) => {
             var returnValue = null;
             var meta = this.props.columnSettings.getColumnMetadataByName(col[0]);
-            //We want to pass in a meta compaisor and if ps
-            if(meta.hasOwnProperty("comparisor")) {
-                if(meta.comparisor(col[1])) {
-                    this.setState({'comparisorStyle': meta.comparisorStyle});
-                } else if(this.state.comparisorStyle.length > 0) {
-                    this.setState({'comparisorStyle': ''});
-                }
-            }
+
 
             //todo: Make this not as ridiculous looking
             var firstColAppend = index === 0 && this.props.hasChildren && this.props.showChildren === false && this.props.useGriddleIcons ?
