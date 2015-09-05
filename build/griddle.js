@@ -746,6 +746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                data: data,
 	                className: this.props.tableClassName,
 	                enableInfiniteScroll: this.isInfiniteScrollEnabled(),
+	                enableStandardScroll: this.props.enableStandardScroll,
 	                nextPage: this.nextPage,
 	                tableHeadStyle: this.props.tableHeadStyle,
 	                showTableHeading: this.props.showTableHeading,
@@ -755,7 +756,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                parentRowCollapsedComponent: this.props.parentRowCollapsedComponent,
 	                parentRowExpandedComponent: this.props.parentRowExpandedComponent,
 	                bodyHeight: this.props.bodyHeight,
-	                enableStandardScroll: this.props.enableStandardScroll,
 	                paddingHeight: this.props.paddingHeight,
 	                rowHeight: this.props.rowHeight,
 	                infiniteScrollLoadTreshold: this.props.infiniteScrollLoadTreshold,
@@ -1232,6 +1232,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      multipleSelectionSettings: null,
 	      className: "",
 	      enableInfiniteScroll: false,
+	      enableStandardScroll: false,
 	      nextPage: null,
 	      hasMorePages: false,
 	      useFixedHeader: false,
@@ -1414,7 +1415,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      tableStyle.tableLayout = "fixed";
 	    }
 
-	    if (this.props.enableInfiniteScroll) {
+	    if (this.props.enableInfiniteScroll || this.props.enableStandardScroll) {
 	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
 	      gridStyle = {
 	        position: "relative",

@@ -18,6 +18,7 @@ var GridTable = React.createClass({
       "multipleSelectionSettings": null,
       "className": "",
       "enableInfiniteScroll": false,
+      "enableStandardScroll": false,
       "nextPage": null,
       "hasMorePages": false,
       "useFixedHeader": false,
@@ -200,7 +201,7 @@ var GridTable = React.createClass({
       tableStyle.tableLayout = "fixed";
     }
 
-    if (this.props.enableInfiniteScroll) {
+    if (this.props.enableInfiniteScroll || this.props.enableStandardScroll) {
       // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
       gridStyle = {
         "position": "relative",
