@@ -2285,7 +2285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            nodes.push(React.createElement(
 	                "th",
 	                { key: "scrollSpace", className: "scrollBarSpacing", style: { padding: "7px" } },
-	                "\" \""
+	                " "
 	            ));
 	        }
 
