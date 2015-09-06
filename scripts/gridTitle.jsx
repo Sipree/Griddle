@@ -13,6 +13,9 @@ var GridTitle = React.createClass({
          "sortSettings": null,
          "multipleSelectionSettings": null,
          "headerStyle": null,
+          enableInfiniteScroll: false,
+          enableStandardScroll: false,
+          useFixedHeader:false,
          "useGriddleStyles": true,
          "useGriddleIcons": true,
          "headerStyles": {},
@@ -90,6 +93,10 @@ var GridTitle = React.createClass({
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
 	  nodes.unshift(<th key="selection" onClick={this.toggleSelectAll} style={titleStyles}><input type="checkbox" checked={this.props.multipleSelectionSettings.getIsSelectAllChecked()} onChange={this.handleSelectionChange} /></th>);
+  }
+
+  if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
+      nodes.push(<th key="scrollSpace" className="scrollBarSpacing" style={{ padding: "7px"}}>" "</th>);
   }
 
     //Get the row from the row settings.

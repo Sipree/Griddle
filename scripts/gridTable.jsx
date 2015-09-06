@@ -235,6 +235,9 @@ var GridTable = React.createClass({
     //construct the table heading component
     var tableHeading = (this.props.showTableHeading ?
         <GridTitle useGriddleStyles={this.props.useGriddleStyles} useGriddleIcons={this.props.useGriddleIcons}
+          enableInfiniteScroll={this.props.enableInfiniteScroll}
+          enableStandardScroll={this.props.enableStandardScroll}
+          useFixedHeader={this.props.useFixedHeader}
           sortSettings={this.props.sortSettings}
 		  multipleSelectionSettings={this.props.multipleSelectionSettings}
           columnSettings={this.props.columnSettings}

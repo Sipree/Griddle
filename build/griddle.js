@@ -1462,6 +1462,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //construct the table heading component
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
+	      enableInfiniteScroll: this.props.enableInfiniteScroll,
+	      enableStandardScroll: this.props.enableStandardScroll,
+	      useFixedHeader: this.props.useFixedHeader,
 	      sortSettings: this.props.sortSettings,
 	      multipleSelectionSettings: this.props.multipleSelectionSettings,
 	      columnSettings: this.props.columnSettings,
@@ -2189,6 +2192,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            sortSettings: null,
 	            multipleSelectionSettings: null,
 	            headerStyle: null,
+	            enableInfiniteScroll: false,
+	            enableStandardScroll: false,
+	            useFixedHeader: false,
 	            useGriddleStyles: true,
 	            useGriddleIcons: true,
 	            headerStyles: {} };
@@ -2272,6 +2278,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	                "th",
 	                { key: "selection", onClick: this.toggleSelectAll, style: titleStyles },
 	                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(), onChange: this.handleSelectionChange })
+	            ));
+	        }
+
+	        if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
+	            nodes.push(React.createElement(
+	                "th",
+	                { key: "scrollSpace", className: "scrollBarSpacing", style: { padding: "7px" } },
+	                "\" \""
 	            ));
 	        }
 
