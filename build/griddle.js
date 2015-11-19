@@ -805,19 +805,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    shouldShowNoDataSection: function (results) {
 	        return this.props.useExternal === false && (typeof results === "undefined" || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
 	    },
-	    componentDidUpdate: function () {
+	    alignTable: function () {
 	        var md = this.getDOMNode().getElementsByClassName("griddle-body");
-
 
 	        Array.prototype.slice.call(md).map(function (anMd) {
 	            //Convert HTMLCollection object to array for map
 	            //We now have a master detail
 	            var tables = anMd.getElementsByTagName("table");
-	            console.log("TABELS len " + tables.length);
 	            var detailsTable = tables.length > 1 ? tables[1] : null;
 	            var headerTable = tables[0];
 	            headerTable.style.tableLayout = "fixed";
 	            if (detailsTable && detailsTable.rows.length > 0) {
+	                debugger;
 	                var row = detailsTable.rows[0].cells.length > 1 ? detailsTable.rows[0] : detailsTable.rows[1];
 	                for (var i = 0, col; col = row.cells[i]; i++) {
 	                    var header_width = headerTable.rows[0].cells[i].children[0].offsetWidth;
@@ -827,10 +826,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    headerTable.rows[0].cells[i].style.width = max + "px";
 	                    col.style.width = max + "px";
-	                    console.log(details_width + " " + header_width + " " + max);
 	                }
 	            }
 	        });
+	    },
+	    componentDidUpdate: function () {
+	        this.alignTable();
+	    },
+	    componentDidMount: function () {
+	        this.alignTable();
 	    },
 	    render: function () {
 	        var that = this,
