@@ -15,7 +15,6 @@ var GridTitle = React.createClass({
          "headerStyle": null,
           enableInfiniteScroll: false,
           enableStandardScroll: false,
-          scrollPaddingStyle: {padding: "6px"},
           useFixedHeader:false,
          "useGriddleStyles": true,
          "useGriddleIcons": true,
@@ -97,7 +96,7 @@ var GridTitle = React.createClass({
   }
 
   if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
-      nodes.push(<th key="scrollSpace" className="scrollBarSpacing" style={ this.props.scrollPaddingStyle }> </th>);
+      nodes.push(<th key="scrollSpace" className="scrollBarSpacing" style={{ padding: "7px"}}> </th>);
   }
 
     //Get the row from the row settings.

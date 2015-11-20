@@ -158,7 +158,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            externalIsLoading: false,
 	            enableInfiniteScroll: false,
 	            enableStandardScroll: false,
-	            scrollPaddingStyle: { padding: "6px" },
 	            bodyHeight: null,
 	            paddingHeight: 5,
 	            rowHeight: 25,
@@ -748,7 +747,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	                className: this.props.tableClassName,
 	                enableInfiniteScroll: this.isInfiniteScrollEnabled(),
 	                enableStandardScroll: this.props.enableStandardScroll,
-	                scrollPaddingStyle: this.props.scrollPaddingStyle,
 	                nextPage: this.nextPage,
 	                tableHeadStyle: this.props.tableHeadStyle,
 	                showTableHeading: this.props.showTableHeading,
@@ -1496,7 +1494,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
 	      enableInfiniteScroll: this.props.enableInfiniteScroll,
 	      enableStandardScroll: this.props.enableStandardScroll,
-	      scrollPaddingStyle: this.props.scrollPaddingStyle,
 	      useFixedHeader: this.props.useFixedHeader,
 	      sortSettings: this.props.sortSettings,
 	      multipleSelectionSettings: this.props.multipleSelectionSettings,
@@ -2227,7 +2224,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            headerStyle: null,
 	            enableInfiniteScroll: false,
 	            enableStandardScroll: false,
-	            scrollPaddingStyle: { padding: "6px" },
 	            useFixedHeader: false,
 	            useGriddleStyles: true,
 	            useGriddleIcons: true,
@@ -2318,7 +2314,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
 	            nodes.push(React.createElement(
 	                "th",
-	                { key: "scrollSpace", className: "scrollBarSpacing", style: this.props.scrollPaddingStyle },
+	                { key: "scrollSpace", className: "scrollBarSpacing", style: { padding: "7px" } },
 	                " "
 	            ));
 	        }
