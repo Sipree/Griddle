@@ -158,6 +158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            externalIsLoading: false,
 	            enableInfiniteScroll: false,
 	            enableStandardScroll: false,
+	            scrollPaddingStyle: { padding: "6px" },
 	            bodyHeight: null,
 	            paddingHeight: 5,
 	            rowHeight: 25,
@@ -747,6 +748,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                className: this.props.tableClassName,
 	                enableInfiniteScroll: this.isInfiniteScrollEnabled(),
 	                enableStandardScroll: this.props.enableStandardScroll,
+	                scrollPaddingStyle: this.props.scrollPaddingStyle,
 	                nextPage: this.nextPage,
 	                tableHeadStyle: this.props.tableHeadStyle,
 	                showTableHeading: this.props.showTableHeading,
@@ -802,36 +804,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 	    shouldShowNoDataSection: function (results) {
 	        return this.props.useExternal === false && (typeof results === "undefined" || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
-	    },
-	    alignTable: function () {
-	        var md = this.getDOMNode().getElementsByClassName("griddle-body");
-
-	        Array.prototype.slice.call(md).map(function (anMd) {
-	            //Convert HTMLCollection object to array for map
-	            //We now have a master detail
-	            var tables = anMd.getElementsByTagName("table");
-	            var detailsTable = tables.length > 1 ? tables[1] : null;
-	            var headerTable = tables[0];
-	            headerTable.style.tableLayout = "fixed";
-	            if (detailsTable && detailsTable.rows.length > 0) {
-	                var row = detailsTable.rows[0].cells.length > 1 ? detailsTable.rows[0] : detailsTable.rows[1];
-	                for (var i = 0, col; col = row.cells[i]; i++) {
-	                    var header_width = headerTable.rows[0].cells[i].children[0].offsetWidth;
-	                    var details_width = col.offsetWidth;
-
-	                    var max = Math.max(header_width, details_width);
-
-	                    headerTable.rows[0].cells[i].style.width = max + "px";
-	                    col.style.width = max + "px";
-	                }
-	            }
-	        });
-	    },
-	    componentDidUpdate: function () {
-	        this.alignTable();
-	    },
-	    componentDidMount: function () {
-	        this.alignTable();
 	    },
 	    render: function () {
 	        var that = this,
@@ -1494,6 +1466,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
 	      enableInfiniteScroll: this.props.enableInfiniteScroll,
 	      enableStandardScroll: this.props.enableStandardScroll,
+	      scrollPaddingStyle: this.props.scrollPaddingStyle,
 	      useFixedHeader: this.props.useFixedHeader,
 	      sortSettings: this.props.sortSettings,
 	      multipleSelectionSettings: this.props.multipleSelectionSettings,
@@ -2224,6 +2197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            headerStyle: null,
 	            enableInfiniteScroll: false,
 	            enableStandardScroll: false,
+	            scrollPaddingStyle: { padding: "6px" },
 	            useFixedHeader: false,
 	            useGriddleStyles: true,
 	            useGriddleIcons: true,
@@ -2314,7 +2288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
 	            nodes.push(React.createElement(
 	                "th",
-	                { key: "scrollSpace", className: "scrollBarSpacing", style: { padding: "7px" } },
+	                { key: "scrollSpace", className: "scrollBarSpacing", style: this.props.scrollPaddingStyle },
 	                " "
 	            ));
 	        }
