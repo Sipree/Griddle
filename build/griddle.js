@@ -816,7 +816,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var headerTable = tables[0];
 	            headerTable.style.tableLayout = "fixed";
 	            if (detailsTable && detailsTable.rows.length > 0) {
-	                debugger;
 	                var row = detailsTable.rows[0].cells.length > 1 ? detailsTable.rows[0] : detailsTable.rows[1];
 	                for (var i = 0, col; col = row.cells[i]; i++) {
 	                    var header_width = headerTable.rows[0].cells[i].children[0].offsetWidth;
