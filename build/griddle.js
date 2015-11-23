@@ -805,36 +805,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    shouldShowNoDataSection: function (results) {
 	        return this.props.useExternal === false && (typeof results === "undefined" || results.length === 0) || this.props.useExternal === true && this.props.externalIsLoading === false && results.length === 0;
 	    },
-	    alignTable: function () {
-	        var md = this.getDOMNode().getElementsByClassName("griddle-body");
-
-	        Array.prototype.slice.call(md).map(function (anMd) {
-	            //Convert HTMLCollection object to array for map
-	            //We now have a master detail
-	            var tables = anMd.getElementsByTagName("table");
-	            var detailsTable = tables.length > 1 ? tables[1] : null;
-	            var headerTable = tables[0];
-	            headerTable.style.tableLayout = "fixed";
-	            if (detailsTable && detailsTable.rows.length > 0) {
-	                var row = detailsTable.rows[0].cells.length > 1 ? detailsTable.rows[0] : detailsTable.rows[1];
-	                for (var i = 0, col; col = row.cells[i]; i++) {
-	                    var header_width = headerTable.rows[0].cells[i].children[0].offsetWidth;
-	                    var details_width = col.offsetWidth;
-
-	                    var max = Math.max(header_width, details_width);
-
-	                    headerTable.rows[0].cells[i].style.width = max + "px";
-	                    col.style.width = max + "px";
-	                }
-	            }
-	        });
-	    },
-	    componentDidUpdate: function () {
-	        this.alignTable();
-	    },
-	    componentDidMount: function () {
-	        this.alignTable();
-	    },
 	    render: function () {
 	        var that = this,
 	            results = this.getCurrentResults(); // Attempt to assign to the filtered results, if we have any.
@@ -2236,8 +2206,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillMount: function () {
 	        this.verifyProps();
 	    },
+	    getDatasetTitle: function (el) {
+	        //Recursively find title element by going up the tree
+	        if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty("title")) {
+	            return el.dataset.title;
+	        }
+	        while (el.parentNode) {
+	            el = el.parentNode;
+	            if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty("title")) {
+	                return el.dataset.title;
+	            }
+	        }
+	        return null;
+	    },
 	    sort: function (event) {
-	        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
+	        this.props.sortSettings.changeSort(this.getDatasetTitle(event.target));
 	    },
 	    toggleSelectAll: function (event) {
 	        this.props.multipleSelectionSettings.toggleSelectAll();
