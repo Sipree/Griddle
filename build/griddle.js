@@ -2206,8 +2206,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    componentWillMount: function () {
 	        this.verifyProps();
 	    },
+	    getDatasetTitle: function (el) {
+	        //Recursively find title element by going up the tree
+	        if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty("title")) {
+	            return el.dataset.title;
+	        }
+	        while (el.parentNode) {
+	            el = el.parentNode;
+	            if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty("title")) {
+	                return el.dataset.title;
+	            }
+	        }
+	        return null;
+	    },
 	    sort: function (event) {
-	        this.props.sortSettings.changeSort(event.target.dataset.title || event.target.parentElement.dataset.title);
+	        this.props.sortSettings.changeSort(this.getDatasetTitle(event.target));
 	    },
 	    toggleSelectAll: function (event) {
 	        this.props.multipleSelectionSettings.toggleSelectAll();
