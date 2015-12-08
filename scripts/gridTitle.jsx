@@ -79,16 +79,10 @@ var GridTitle = React.createClass({
         var columnStyle = that.props.columnSettings.getMetadataColumnProperty(col, "columnStyle", {});
         var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
         var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
-        var disp;
-        if(displayComponent != null) {
-            disp = displayComponent;
-
-        } else {
-            disp = displayName;
-        }
+        var disp = (displayComponent != null) ? displayComponent: displayName;
         columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
-        if (that.props.useGriddleStyles){
+        if (that.props.useGriddleStyles) {
           titleStyles = {
             backgroundColor: "#EDEDEF",
             border: "0",
