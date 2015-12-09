@@ -1,56 +1,58 @@
-"use strict";
-
 /*
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require("react");
-var _ = require("underscore");
-var ColumnProperties = require("./columnProperties.js");
+'use strict';
+
+var React = require('react');
+var _ = require('underscore');
+var ColumnProperties = require('./columnProperties.js');
 
 var GridTitle = React.createClass({
-    displayName: "GridTitle",
-    getDefaultProps: function () {
+    displayName: 'GridTitle',
+
+    getDefaultProps: function getDefaultProps() {
         return {
-            columnSettings: null,
-            rowSettings: null,
-            sortSettings: null,
-            multipleSelectionSettings: null,
-            headerStyle: null,
+            "columnSettings": null,
+            "rowSettings": null,
+            "sortSettings": null,
+            "multipleSelectionSettings": null,
+            "headerStyle": null,
             enableInfiniteScroll: false,
             enableStandardScroll: false,
             scrollPaddingStyle: { padding: "6px" },
             useFixedHeader: false,
-            useGriddleStyles: true,
-            useGriddleIcons: true,
-            headerStyles: {} };
+            "useGriddleStyles": true,
+            "useGriddleIcons": true,
+            "headerStyles": {}
+        };
     },
-    componentWillMount: function () {
+    componentWillMount: function componentWillMount() {
         this.verifyProps();
     },
-    getDatasetTitle: function (el) {
+    getDatasetTitle: function getDatasetTitle(el) {
         //Recursively find title element by going up the tree
-        if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty("title")) {
+        if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty('title')) {
             return el.dataset.title;
         }
         while (el.parentNode) {
             el = el.parentNode;
-            if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty("title")) {
+            if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty('title')) {
                 return el.dataset.title;
             }
         }
         return null;
     },
-    sort: function (event) {
+    sort: function sort(event) {
         this.props.sortSettings.changeSort(this.getDatasetTitle(event.target));
     },
-    toggleSelectAll: function (event) {
+    toggleSelectAll: function toggleSelectAll(event) {
         this.props.multipleSelectionSettings.toggleSelectAll();
     },
-    handleSelectionChange: function (event) {
+    handleSelectionChange: function handleSelectionChange(event) {
         //hack to get around warning message that's not helpful in this case
         return;
     },
-    verifyProps: function () {
+    verifyProps: function verifyProps() {
         if (this.props.columnSettings === null) {
             console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
         }
@@ -59,7 +61,7 @@ var GridTitle = React.createClass({
             console.error("gridTitle: The sortSettings prop is null and it shouldn't be");
         }
     },
-    render: function () {
+    render: function render() {
         this.verifyProps();
         var that = this;
         var titleStyles = null;
@@ -75,7 +77,6 @@ var GridTitle = React.createClass({
                 columnSort += that.props.sortSettings.sortDescendingClassName;
                 sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
             }
-
 
             var meta = that.props.columnSettings.getColumnMetadataByName(col);
             var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
@@ -103,44 +104,23 @@ var GridTitle = React.createClass({
             } else {
                 titleStyles = columnStyle;
             }
-            return React.createElement(
-                "th",
-                { onClick: columnIsSortable ? that.sort : null, "data-title": col, className: columnSort, key: displayName, style: titleStyles },
-                disp,
-                sortComponent
-            );
+            return React.createElement('th', { onClick: columnIsSortable ? that.sort : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, disp, sortComponent);
         });
 
         if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
-            nodes.unshift(React.createElement(
-                "th",
-                { key: "selection", onClick: this.toggleSelectAll, style: titleStyles },
-                React.createElement("input", { type: "checkbox", checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(), onChange: this.handleSelectionChange })
-            ));
+            nodes.unshift(React.createElement('th', { key: 'selection', onClick: this.toggleSelectAll, style: titleStyles }, React.createElement('input', { type: 'checkbox', checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(), onChange: this.handleSelectionChange })));
         }
 
         if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
-            nodes.push(React.createElement(
-                "th",
-                { key: "scrollSpace", className: "scrollBarSpacing", style: this.props.scrollPaddingStyle },
-                " "
-            ));
+            nodes.push(React.createElement('th', { key: 'scrollSpace', className: 'scrollBarSpacing', style: this.props.scrollPaddingStyle }, ' '));
         }
 
         //Get the row from the row settings.
         var className = that.props.rowSettings && that.props.rowSettings.getHeaderRowMetadataClass() || null;
 
-        return React.createElement(
-            "thead",
-            null,
-            React.createElement(
-                "tr",
-                {
-                    className: className,
-                    style: this.props.headerStyles },
-                nodes
-            )
-        );
+        return React.createElement('thead', null, React.createElement('tr', {
+            className: className,
+            style: this.props.headerStyles }, nodes));
     }
 });
 

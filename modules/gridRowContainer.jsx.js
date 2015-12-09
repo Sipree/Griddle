@@ -1,57 +1,58 @@
-"use strict";
-
 /*
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
-var React = require("react");
-var ColumnProperties = require("./columnProperties.js");
+'use strict';
+
+var React = require('react');
+var ColumnProperties = require('./columnProperties.js');
 
 var GridRowContainer = React.createClass({
-  displayName: "GridRowContainer",
-  getDefaultProps: function () {
+  displayName: 'GridRowContainer',
+
+  getDefaultProps: function getDefaultProps() {
     return {
-      useGriddleStyles: true,
-      useGriddleIcons: true,
-      isSubGriddle: false,
-      columnSettings: null,
-      rowSettings: null,
-      paddingHeight: null,
-      rowHeight: null,
-      parentRowCollapsedClassName: "parent-row",
-      parentRowExpandedClassName: "parent-row expanded",
-      parentRowCollapsedComponent: "▶",
-      parentRowExpandedComponent: "▼",
-      onRowClick: null,
-      multipleSelectionSettings: null
+      "useGriddleStyles": true,
+      "useGriddleIcons": true,
+      "isSubGriddle": false,
+      "columnSettings": null,
+      "rowSettings": null,
+      "paddingHeight": null,
+      "rowHeight": null,
+      "parentRowCollapsedClassName": "parent-row",
+      "parentRowExpandedClassName": "parent-row expanded",
+      "parentRowCollapsedComponent": "▶",
+      "parentRowExpandedComponent": "▼",
+      "onRowClick": null,
+      "multipleSelectionSettings": null
     };
   },
-  getInitialState: function () {
+  getInitialState: function getInitialState() {
     return {
-      data: {},
-      showChildren: false
+      "data": {},
+      "showChildren": false
     };
   },
-  componentWillReceiveProps: function () {
+  componentWillReceiveProps: function componentWillReceiveProps() {
     this.setShowChildren(false);
   },
-  toggleChildren: function () {
+  toggleChildren: function toggleChildren() {
     this.setShowChildren(this.state.showChildren === false);
   },
-  setShowChildren: function (visible) {
+  setShowChildren: function setShowChildren(visible) {
     this.setState({
       showChildren: visible
     });
   },
-  verifyProps: function () {
+  verifyProps: function verifyProps() {
     if (this.props.columnSettings === null) {
       console.error("gridRowContainer: The columnSettings prop is null and it shouldn't be");
     }
   },
-  render: function () {
+  render: function render() {
     this.verifyProps();
     var that = this;
     if (typeof this.props.data === "undefined") {
-      return React.createElement("tbody", null);
+      return React.createElement('tbody', null);
     }
     var arr = [];
 
@@ -61,8 +62,6 @@ var GridRowContainer = React.createClass({
     var childCustomRowComponent = this.props.childCustomRowComponent != null ? this.props.childCustomRowComponent : null;
     var childCustomRowComponentClassName = this.props.childCustomRowComponentClassName;
     var childUseCustomRowComponent = this.props.childUseCustomRowComponent; // default will be false if not specified
-
-
 
     arr.push(React.createElement(this.props.rowSettings.rowComponent, {
       useGriddleStyles: this.props.useGriddleStyles,
@@ -88,38 +87,26 @@ var GridRowContainer = React.createClass({
     var children = null;
 
     if (that.state.showChildren) {
-      children = that.props.hasChildren && this.props.data.children.map(function (row, index) {
-        if (typeof row.children !== "undefined") {
-          var Griddle = require("./griddle.jsx");
-          return React.createElement(
-            "tr",
-            { style: { paddingLeft: 5 } },
-            React.createElement(
-              "td",
-              { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: "griddle-parent", style: that.props.useGriddleStyles ? { border: "none", padding: "0 0 0 5px" } : null },
-              React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: childColumns,
-                tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
-                parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-                useCustomRowComponent: childUseCustomRowComponent,
-                customRowComponent: childCustomRowComponent,
-                customRowComponentClassName: childCustomRowComponentClassName,
-                showTableHeading: that.props.childShowHeader, showPager: false, columnMetadata: childMetadata,
-                parentRowExpandedComponent: that.props.parentRowExpandedComponent,
-                parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-                paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })
-            )
-          );
+      children = that.props.hasChildren && this.props.data["children"].map(function (row, index) {
+        if (typeof row["children"] !== "undefined") {
+          var Griddle = require('./griddle.jsx');
+          return React.createElement('tr', { style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: childColumns,
+            tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+            parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
+            useCustomRowComponent: childUseCustomRowComponent,
+            customRowComponent: childCustomRowComponent,
+            customRowComponentClassName: childCustomRowComponentClassName,
+            showTableHeading: that.props.childShowHeader, showPager: false, columnMetadata: childMetadata,
+            parentRowExpandedComponent: that.props.parentRowExpandedComponent,
+            parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
+            paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })));
         }
 
-        return React.createElement(that.props.rowSettings.rowComponent, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnMetadata, key: that.props.rowSettings.getRowKey(row) });
+        return React.createElement(that.props.rowSettings.rowComponent, { useGriddleStyles: that.props.useGriddleStyles, isSubGriddle: that.props.isSubGriddle, data: row, columnSettings: that.props.columnSettings, isChildRow: true, columnMetadata: that.props.columnSettings.columnMetadata, key: that.props.rowSettings.getRowKey(row) });
       });
     }
 
-    return that.props.hasChildren === false ? arr[0] : React.createElement(
-      "tbody",
-      null,
-      that.state.showChildren ? arr.concat(children) : arr
-    );
+    return that.props.hasChildren === false ? arr[0] : React.createElement('tbody', null, that.state.showChildren ? arr.concat(children) : arr);
   }
 });
 
