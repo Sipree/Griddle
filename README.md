@@ -1,10 +1,17 @@
+[![Stories in Ready](https://badge.waffle.io/GriddleGriddle/griddle.png?label=ready&title=Ready)](https://waffle.io/GriddleGriddle/griddle)
+[![Stories in Discussion](https://badge.waffle.io/GriddleGriddle/Griddle.svg?label=ready&title=Discussion)](http://waffle.io/GriddleGriddle/Griddle)
 Griddle
 =======
-Join us in [#griddle on Reactiflux slack](http://www.reactiflux.com/)! or [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+#### [Take a brief look at what's coming in Griddle v1.0](https://github.com/GriddleGriddle/Griddle/issues/276) ####
+----------
+
+Join us here [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/DynamicTyped/Griddle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+[![Build Status](https://travis-ci.org/GriddleGriddle/Griddle.svg?branch=master)](https://travis-ci.org/GriddleGriddle/Griddle)
 
 ----------
 
-Griddle is a simple grid Component for use with React. It depends on [underscore.js](http://underscorejs.org/) and [React](http://facebook.github.io/react/).
+Griddle is a simple grid Component for use with React. It depends on [Lodash Modules](https://lodash.com/) and [React](http://facebook.github.io/react/).
 
 Please check out the [documentation and examples](http://dynamictyped.github.io/Griddle).
 
@@ -32,10 +39,29 @@ Griddle is not yet version 1. There are likely some areas that will change and s
 ----------
 ###Contributing:###
 
-Please feel free submit any bugs or suggestions as issues. If you are having problems getting up and running please post in the [Gitter chat](https://gitter.im/DynamicTyped/Griddle) and we'll try to help out. Pull requests are welcome but if you have an idea please post as an issue first to make sure everyone is on the same-page (and to help avoid duplicate work). If you are looking to help out but don't know where to start, please take a look at [approved issues that don't have anyone assigned](https://github.com/dynamictyped/griddle/issues?q=is%3Aopen+is%3Aissue+label%3Aapproved+no%3Aassignee).
+Please feel free submit any bugs or suggestions as issues. If you are having problems getting up and running please post in the [Gitter chat](https://gitter.im/DynamicTyped/Griddle) and we'll try to help out. Pull requests are welcome but if you have an idea please post as an issue first to make sure everyone is on the same-page (and to help avoid duplicate work). If you are looking to help out but don't know where to start, please take a look at [approved issues that don't have anyone assigned](https://github.com/GriddleGriddle/Griddle/issues?q=is%3Aopen+label%3Aapproved+no%3Aassignee).
 
 ----------
 ###Changelog:###
+
+0.4.0
+- Remove the underscore dependencies and implement the use of lodash-modularized
+- Support filter by column
+- Various fixes
+
+Thanks @dlong500, Chris Main, @astraw, Tony L. Kerz, @jsdmc, @kevinhughes27, @liorbentov, @bouk, @yorchv, and everyone else who has helped with 0.4.0!
+
+0.3.0
+
+- Pulling the React 0.14 update into a larger version update to prevent npm from assuming it's safe to update.
+
+0.2.16
+
+- Reverted to prevent an auto-upgrade to React 0.14.
+
+0.2.15
+
+- Upgrade to React 0.14 - big thanks to Sajin Shrestha (@sajinshrestha) on nearly single-handedly taking on this effort!
 
 0.2.13
 - Numerous bug fixes, additions.

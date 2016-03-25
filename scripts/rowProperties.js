@@ -1,20 +1,21 @@
-var _ = require('underscore');
+var _uniqueId = require('lodash.uniqueid');
 
 class RowProperties{
   constructor (rowMetadata={}, rowComponent=null, isCustom=false) {
     this.rowMetadata = rowMetadata;
     this.rowComponent = rowComponent;
     this.isCustom = isCustom;
+    // assign unique Id to each griddle instance
   }
 
-  getRowKey(row) {
+  getRowKey(row, key) {
     var uniqueId;
 
     if(this.hasRowMetadataKey()){
       uniqueId = row[this.rowMetadata.key];
     }
     else{
-      uniqueId = _.uniqueId("grid_row");
+      uniqueId = _uniqueId("grid_row");
     }
 
     //todo: add error handling

@@ -2,13 +2,19 @@
    See License / Disclaimer https://raw.githubusercontent.com/DynamicTyped/Griddle/master/LICENSE
 */
 var React = require('react');
-var _ = require('underscore');
 var ColumnProperties = require('./columnProperties.js');
+
+var DefaultHeaderComponent = React.createClass({
+  render: function(){
+    return (<span>{this.props.displayName}</span>);
+  }
+});
 
 var GridTitle = React.createClass({
   getDefaultProps: function(){
       return {
          "columnSettings" : null,
+         "filterByColumn": function() {},
          "rowSettings" : null,
          "sortSettings": null,
          "multipleSelectionSettings": null,
@@ -63,7 +69,8 @@ var GridTitle = React.createClass({
 
     var nodes = this.props.columnSettings.getColumns().map(function(col, index){
         var columnSort = "";
-        var sortComponent = that.props.sortSettings.sortDefaultComponent;
+        var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+        var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
 
         if(that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending){
             columnSort = that.props.sortSettings.sortAscendingClassName;
@@ -73,13 +80,17 @@ var GridTitle = React.createClass({
             sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
         }
 
-
         var meta = that.props.columnSettings.getColumnMetadataByName(col);
         var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
         var columnStyle = that.props.columnSettings.getMetadataColumnProperty(col, "columnStyle", {});
+
         var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
         var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
         var disp = (displayComponent != null) ? displayComponent: displayName;
+
+        var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
+        var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
+
         columnSort = meta == null ? columnSort : (columnSort && (columnSort + " ")||columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
 
         if (that.props.useGriddleStyles) {
@@ -95,7 +106,12 @@ var GridTitle = React.createClass({
         } else {
             titleStyles = columnStyle;
         }
-        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col}  className={columnSort} key={displayName} style={titleStyles}>{disp}{sortComponent}</th>);
+
+        return (<th onClick={columnIsSortable ? that.sort : null} data-title={col} className={columnSort} key={displayName} style={titleStyles}>
+          <HeaderComponent columnName={col} displayName={displayName} filterByColumn={that.props.filterByColumn} {...headerProps}/>
+          {disp}
+          {sortComponent}
+        </th>);
     });
 
   if(nodes && this.props.multipleSelectionSettings.isMultipleSelection) {

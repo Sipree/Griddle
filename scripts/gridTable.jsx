@@ -6,7 +6,6 @@ var GridTitle = require('./gridTitle.jsx');
 var GridRowContainer = require('./gridRowContainer.jsx');
 var ColumnProperties = require('./columnProperties.js');
 var RowProperties = require('./rowProperties.js');
-var _ = require('underscore');
 
 var GridTable = React.createClass({
   getDefaultProps: function(){
@@ -25,9 +24,9 @@ var GridTable = React.createClass({
       "useFixedLayout": true,
       "paddingHeight": null,
       "rowHeight": null,
+      "filterByColumn": null,
       "infiniteScrollLoadTreshold": null,
       "bodyHeight": null,
-      "tableHeading": "",
       "useGriddleStyles": true,
       "useGriddleIcons": true,
       "isSubGriddle": false,
@@ -58,7 +57,7 @@ var GridTable = React.createClass({
   gridScroll: function(){
     if (this.props.enableInfiniteScroll && !this.props.externalIsLoading) {
       // If the scroll height is greater than the current amount of rows displayed, update the page.
-      var scrollable = this.refs.scrollable.getDOMNode();
+      var scrollable = this.refs.scrollable;
       var scrollTop = scrollable.scrollTop
       var scrollHeight = scrollable.scrollHeight;
       var clientHeight = scrollable.clientHeight;
@@ -135,12 +134,14 @@ var GridTable = React.createClass({
 
       var nodes = nodeData.map(function(row, index){
           var hasChildren = (typeof row["children"] !== "undefined") && row["children"].length > 0;
-          var uniqueId = that.props.rowSettings.getRowKey(row);
+          var uniqueId = that.props.rowSettings.getRowKey(row, index);
 
           //at least one item in the group has children.
           if (hasChildren) { anyHasChildren = hasChildren; }
 
-          return (<GridRowContainer useGriddleStyles={that.props.useGriddleStyles} isSubGriddle={that.props.isSubGriddle}
+          return (<GridRowContainer 
+            useGriddleStyles={that.props.useGriddleStyles} 
+            isSubGriddle={that.props.isSubGriddle}
             childColumns={that.props.childColumns}
             childColumnMetadata={that.props.childColumnMetadata}
             childCustomRowComponent={that.props.childCustomRowComponent}
@@ -153,6 +154,12 @@ var GridTable = React.createClass({
 		    multipleSelectionSettings={that.props.multipleSelectionSettings}
             rowHeight={that.props.rowHeight} hasChildren={hasChildren} tableClassName={that.props.className} onRowClick={that.props.onRowClick} />)
       });
+
+      // no data section
+      if (this.props.showNoData) {
+        var colSpan = this.props.columnSettings.getVisibleColumnCount();
+        nodes.push(<tr key="no-data-section"><td colSpan={colSpan}>{this.props.noDataSection}</td></tr>);
+      }
 
       // Add the spacer rows for nodes we're not rendering.
       if (aboveSpacerRow) {
@@ -242,27 +249,29 @@ var GridTable = React.createClass({
           sortSettings={this.props.sortSettings}
 		  multipleSelectionSettings={this.props.multipleSelectionSettings}
           columnSettings={this.props.columnSettings}
+          filterByColumn={this.props.filterByColumn}
           rowSettings={this.props.rowSettings}/>
-        : "");
+      : undefined);
 
     //check to see if any of the rows have children... if they don't wrap everything in a tbody so the browser doesn't auto do this
     if (!anyHasChildren){
       nodes = <tbody>{nodes}</tbody>
     }
 
-    var pagingContent = "";
+    var pagingContent = <tbody />;
     if(this.props.showPager){
       var pagingStyles = this.props.useGriddleStyles ?
         {
           "padding" : "0",
           backgroundColor: "#EDEDED",
           border: "0",
-          color: "#222"
+          color: "#222",
+          height: this.props.showNoData ? "20px" : null
         }
         : null;
       pagingContent = (<tbody><tr>
           <td colSpan={this.props.multipleSelectionSettings.isMultipleSelection ? this.props.columnSettings.getVisibleColumnCount() + 1 : this.props.columnSettings.getVisibleColumnCount()} style={pagingStyles} className="footer-container">
-            {this.props.pagingContent}
+            {!this.props.showNoData ? this.props.pagingContent : null}
           </td>
         </tr></tbody>)
     }

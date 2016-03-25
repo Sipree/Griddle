@@ -144,16 +144,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            //this column will determine which column holds subgrid data
 	            //it will be passed through with the data object but will not be rendered
 	            "childrenColumnName": "children",
-	            tableHeadStyle: null,
-	            searchIcon: false,
-	            searchStyle: {},
-	            //These next rows are for children properties so we can customize the child data
-	            "childColumns": null,
-	            "childColumnMetadata": null,
-	            "childCustomRowComponent": null,
-	            "childUseCustomRowComponent": false,
-	            "childCustomRowComponentClassName": null,
-	            "childShowHeader": false,
 	            //Any column in this list will be treated as metadata and will be passed through with the data but won't be rendered
 	            "metadataColumns": [],
 	            "showFilter": false,
@@ -190,8 +180,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "externalLoadingComponent": null,
 	            "externalIsLoading": false,
 	            "enableInfiniteScroll": false,
-	            "enableStandardScroll": false,
-	            "scrollPaddingStyle": { padding: "6px" },
 	            "bodyHeight": null,
 	            "paddingHeight": 5,
 	            "rowHeight": 25,
@@ -200,7 +188,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            "isSubGriddle": false,
 	            "enableSort": true,
 	            "onRowClick": null,
-	            "onAppendClick": null,
 	            /* css class names */
 	            "sortAscendingClassName": "sort-ascending",
 	            "sortDescendingClassName": "sort-descending",
@@ -483,7 +470,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.verifyExternal();
 	        this.verifyCustom();
 
-	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns, this.props.childColumns);
+	        this.columnSettings = new ColumnProperties(this.props.results.length > 0 ? deep.keys(this.props.results[0]) : [], this.props.columns, this.props.childrenColumnName, this.props.columnMetadata, this.props.metadataColumns);
 
 	        this.rowSettings = new RowProperties(this.props.rowMetadata, this.props.useCustomTableRowComponent && this.props.customTableRowComponent ? this.props.customTableRowComponent : GridRow, this.props.useCustomTableRowComponent);
 
@@ -759,7 +746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        };
 	    },
 	    getFilter: function getFilter() {
-	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, searchStyle: this.props.searchStyle, searchIcon: this.props.searchIcon, placeholderText: this.props.filterPlaceholderText }) : "";
+	        return this.props.showFilter && this.props.useCustomGridComponent === false ? this.props.useCustomFilterComponent ? React.createElement(CustomFilterContainer, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText, customFilterComponent: this.props.customFilterComponent, results: this.props.results, currentResults: this.getCurrentResults() }) : React.createElement(GridFilter, { changeFilter: this.setFilter, placeholderText: this.props.filterPlaceholderText }) : "";
 	    },
 	    getSettings: function getSettings() {
 	        return this.props.showSettings ? React.createElement('button', { type: 'button', className: this.props.settingsToggleClassName, onClick: this.toggleColumnChooser,
@@ -779,10 +766,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            settingsStyles = this.getSettingsStyles();
 
 	            topContainerStyles = this.getClearFixStyles();
-
-	            filterStyles = _.extend(this.props.searchStyle, filterStyles);
-	        } else {
-	            filterStyles = this.props.searchStyle;
 	        }
 
 	        return React.createElement('div', { className: 'top-section', style: topContainerStyles }, React.createElement('div', { className: 'griddle-filter', style: filterStyles }, filter), React.createElement('div', { className: 'griddle-settings-toggle', style: settingsStyles }, settings));
@@ -833,10 +816,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            data: data,
 	            className: this.props.tableClassName,
 	            enableInfiniteScroll: this.isInfiniteScrollEnabled(),
-	            enableStandardScroll: this.props.enableStandardScroll,
-	            scrollPaddingStyle: this.props.scrollPaddingStyle,
 	            nextPage: this.nextPage,
-	            tableHeadStyle: this.props.tableHeadStyle,
 	            showTableHeading: this.props.showTableHeading,
 	            useFixedHeader: this.props.useFixedHeader,
 	            parentRowCollapsedClassName: this.props.parentRowCollapsedClassName,
@@ -849,12 +829,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	            infiniteScrollLoadTreshold: this.props.infiniteScrollLoadTreshold,
 	            externalLoadingComponent: this.props.externalLoadingComponent,
 	            externalIsLoading: this.props.externalIsLoading,
-	            childColumns: this.props.childColumns,
-	            childColumnMetadata: this.props.childColumnMetadata,
-	            childCustomRowComponent: this.props.childCustomRowComponent,
-	            childUseCustomRowComponent: this.props.childUseCustomRowComponent,
-	            childCustomRowComponentClassName: this.props.childCustomRowComponentClassName,
-	            childShowHeader: this.props.childShowHeader,
 	            hasMorePages: hasMorePages,
 	            onRowClick: this.props.onRowClick }));
 	    },
@@ -921,15 +895,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        //add custom to the class name so we can style it differently
 	        gridClassName += this.props.useCustomRowComponent ? " griddle-custom" : "";
 
-	        var finalResultContent;
-	        if (this.shouldShowNoDataSection(results)) {
-	            gridClassName += this.props.noDataClassName && this.props.noDataClassName.length > 0 ? " " + this.props.noDataClassName : "";
-	            finalResultContent = React.createElement('div', { className: 'results' }, resultContent, this.getNoDataSection(gridClassName, topSection));
-	        } else {
-	            finalResultContent = resultContent;
-	        }
-
-	        return React.createElement('div', { className: gridClassName }, topSection, columnSelector, React.createElement('div', { className: 'griddle-container', style: this.props.useGriddleStyles && !this.props.isSubGriddle ? { border: "1px solid #DDD" } : null }, finalResultContent));
+	        return React.createElement('div', { className: gridClassName }, topSection, columnSelector, React.createElement('div', { className: 'griddle-container', style: this.props.useGriddleStyles && !this.props.isSubGriddle ? { border: "1px solid #DDD" } : null }, resultContent));
 	    }
 	});
 
@@ -968,7 +934,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	      "multipleSelectionSettings": null,
 	      "className": "",
 	      "enableInfiniteScroll": false,
-	      "enableStandardScroll": false,
 	      "nextPage": null,
 	      "hasMorePages": false,
 	      "useFixedHeader": false,
@@ -1078,7 +1043,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var aboveSpacerRowStyle = { height: displayStart * adjustedHeight + "px" };
 	        aboveSpacerRow = React.createElement('tr', { key: 'above-' + aboveSpacerRowStyle.height, style: aboveSpacerRowStyle });
 	        var belowSpacerRowStyle = { height: (this.props.data.length - displayEnd) * adjustedHeight + "px" };
-	        //belowSpacerRow = (<tr key={'below-' + belowSpacerRowStyle.height} style={belowSpacerRowStyle}></tr>);
+	        belowSpacerRow = React.createElement('tr', { key: 'below-' + belowSpacerRowStyle.height, style: belowSpacerRowStyle });
 	      }
 
 	      var nodes = nodeData.map(function (row, index) {
@@ -1093,17 +1058,22 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return React.createElement(GridRowContainer, {
 	          useGriddleStyles: that.props.useGriddleStyles,
 	          isSubGriddle: that.props.isSubGriddle,
-	          childColumns: that.props.childColumns,
-	          childColumnMetadata: that.props.childColumnMetadata,
-	          childCustomRowComponent: that.props.childCustomRowComponent,
-	          childUseCustomRowComponent: that.props.childUseCustomRowComponent,
-	          childCustomRowComponentClassName: that.props.childCustomRowComponentClassName,
-	          childShowHeader: that.props.childShowHeader,
-	          parentRowExpandedClassName: that.props.parentRowExpandedClassName, parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	          parentRowExpandedComponent: that.props.parentRowExpandedComponent, parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	          data: row, key: uniqueId + '-container', uniqueId: uniqueId, columnSettings: that.props.columnSettings, rowSettings: that.props.rowSettings, paddingHeight: that.props.paddingHeight,
+	          parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	          parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
+	          parentRowExpandedComponent: that.props.parentRowExpandedComponent,
+	          parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
+	          data: row,
+	          key: uniqueId + '-container',
+	          uniqueId: uniqueId,
+	          columnSettings: that.props.columnSettings,
+	          rowSettings: that.props.rowSettings,
+	          paddingHeight: that.props.paddingHeight,
 	          multipleSelectionSettings: that.props.multipleSelectionSettings,
-	          rowHeight: that.props.rowHeight, hasChildren: hasChildren, tableClassName: that.props.className, onRowClick: that.props.onRowClick });
+	          rowHeight: that.props.rowHeight,
+	          hasChildren: hasChildren,
+	          tableClassName: that.props.className,
+	          onRowClick: that.props.onRowClick
+	        });
 	      });
 
 	      // no data section
@@ -1133,11 +1103,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var that = this;
 	    var nodes = [];
 
-	    var tableHeadStyle = this.props.useGriddleStyles && tableStyle || null;
-	    if (this.props.tableHeadStyle != null) {
-	      tableHeadStyle = tableHeadStyle == null ? this.props.tableHeadStyle : _.extend(tableHeadStyle, this.props.tableHeadStyle);
-	    }
-
 	    // for if we need to wrap the group in one tbody or many
 	    var anyHasChildren = false;
 
@@ -1158,7 +1123,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      tableStyle.tableLayout = "fixed";
 	    }
 
-	    if (this.props.enableInfiniteScroll || this.props.enableStandardScroll) {
+	    if (this.props.enableInfiniteScroll) {
 	      // If we're enabling infinite scrolling, we'll want to include the max height of the grid body + allow scrolling.
 	      gridStyle = {
 	        "position": "relative",
@@ -1189,10 +1154,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    //construct the table heading component
 	    var tableHeading = this.props.showTableHeading ? React.createElement(GridTitle, { useGriddleStyles: this.props.useGriddleStyles, useGriddleIcons: this.props.useGriddleIcons,
-	      enableInfiniteScroll: this.props.enableInfiniteScroll,
-	      enableStandardScroll: this.props.enableStandardScroll,
-	      scrollPaddingStyle: this.props.scrollPaddingStyle,
-	      useFixedHeader: this.props.useFixedHeader,
 	      sortSettings: this.props.sortSettings,
 	      multipleSelectionSettings: this.props.multipleSelectionSettings,
 	      columnSettings: this.props.columnSettings,
@@ -1222,7 +1183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        tableStyle.tableLayout = "fixed";
 	      }
 
-	      return React.createElement('div', null, React.createElement('table', { className: this.props.className, style: tableHeadStyle }, tableHeading), React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent, pagingContent)));
+	      return React.createElement('div', null, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading), React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, nodes, loadingContent, pagingContent)));
 	    }
 
 	    return React.createElement('div', { ref: 'scrollable', onScroll: this.gridScroll, style: gridStyle }, React.createElement('table', { className: this.props.className, style: this.props.useGriddleStyles && tableStyle || null }, tableHeading, nodes, loadingContent, pagingContent));
@@ -1241,144 +1202,117 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
 	};
 
 	var React = __webpack_require__(2);
 	var ColumnProperties = __webpack_require__(5);
 
 	var DefaultHeaderComponent = React.createClass({
-	    displayName: 'DefaultHeaderComponent',
+	  displayName: 'DefaultHeaderComponent',
 
-	    render: function render() {
-	        return React.createElement('span', null, this.props.displayName);
-	    }
+	  render: function render() {
+	    return React.createElement('span', null, this.props.displayName);
+	  }
 	});
 
 	var GridTitle = React.createClass({
-	    displayName: 'GridTitle',
+	  displayName: 'GridTitle',
 
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            "columnSettings": null,
-	            "filterByColumn": function filterByColumn() {},
-	            "rowSettings": null,
-	            "sortSettings": null,
-	            "multipleSelectionSettings": null,
-	            "headerStyle": null,
-	            enableInfiniteScroll: false,
-	            enableStandardScroll: false,
-	            scrollPaddingStyle: { padding: "6px" },
-	            useFixedHeader: false,
-	            "useGriddleStyles": true,
-	            "useGriddleIcons": true,
-	            "headerStyles": {}
-	        };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        this.verifyProps();
-	    },
-	    getDatasetTitle: function getDatasetTitle(el) {
-	        //Recursively find title element by going up the tree
-	        if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty('title')) {
-	            return el.dataset.title;
-	        }
-	        while (el.parentNode) {
-	            el = el.parentNode;
-	            if (!(typeof el.dataset === "undefined") && el.dataset.hasOwnProperty('title')) {
-	                return el.dataset.title;
-	            }
-	        }
-	        return null;
-	    },
-	    sort: function sort(event) {
-	        this.props.sortSettings.changeSort(this.getDatasetTitle(event.target));
-	    },
-	    toggleSelectAll: function toggleSelectAll(event) {
-	        this.props.multipleSelectionSettings.toggleSelectAll();
-	    },
-	    handleSelectionChange: function handleSelectionChange(event) {
-	        //hack to get around warning message that's not helpful in this case
-	        return;
-	    },
-	    verifyProps: function verifyProps() {
-	        if (this.props.columnSettings === null) {
-	            console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
-	        }
-
-	        if (this.props.sortSettings === null) {
-	            console.error("gridTitle: The sortSettings prop is null and it shouldn't be");
-	        }
-	    },
-	    render: function render() {
-	        this.verifyProps();
-	        var that = this;
-	        var titleStyles = null;
-
-	        var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
-	            var columnSort = "";
-	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
-	            var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
-
-	            if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
-	                columnSort = that.props.sortSettings.sortAscendingClassName;
-	                sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
-	            } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false) {
-	                columnSort += that.props.sortSettings.sortDescendingClassName;
-	                sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
-	            }
-
-	            var meta = that.props.columnSettings.getColumnMetadataByName(col);
-	            var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
-	            var columnStyle = that.props.columnSettings.getMetadataColumnProperty(col, "columnStyle", {});
-
-	            var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
-	            var displayComponent = that.props.columnSettings.getMetadataColumnProperty(col, "displayComponent", null);
-	            var disp = displayComponent != null ? displayComponent : displayName;
-
-	            var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
-	            var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
-
-	            columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
-
-	            if (that.props.useGriddleStyles) {
-	                titleStyles = {
-	                    backgroundColor: "#EDEDEF",
-	                    border: "0",
-	                    borderBottom: "1px solid #DDD",
-	                    color: "#222",
-	                    padding: "5px",
-	                    cursor: columnIsSortable ? "pointer" : "default"
-	                };
-	                titleStyles = _.extend(columnStyle, titleStyles);
-	            } else {
-	                titleStyles = columnStyle;
-	            }
-
-	            return React.createElement('th', { onClick: columnIsSortable ? that.sort : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), disp, sortComponent);
-	        });
-
-	        if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
-	            nodes.unshift(React.createElement('th', { key: 'selection', onClick: this.toggleSelectAll, style: titleStyles }, React.createElement('input', { type: 'checkbox', checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(), onChange: this.handleSelectionChange })));
-	        }
-
-	        if ((this.props.enableInfiniteScroll || this.props.enableStandardScroll) && this.props.useFixedHeader) {
-	            nodes.push(React.createElement('th', { key: 'scrollSpace', className: 'scrollBarSpacing', style: this.props.scrollPaddingStyle }, ' '));
-	        }
-
-	        //Get the row from the row settings.
-	        var className = that.props.rowSettings && that.props.rowSettings.getHeaderRowMetadataClass() || null;
-
-	        return React.createElement('thead', null, React.createElement('tr', {
-	            className: className,
-	            style: this.props.headerStyles }, nodes));
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      "columnSettings": null,
+	      "filterByColumn": function filterByColumn() {},
+	      "rowSettings": null,
+	      "sortSettings": null,
+	      "multipleSelectionSettings": null,
+	      "headerStyle": null,
+	      "useGriddleStyles": true,
+	      "useGriddleIcons": true,
+	      "headerStyles": {}
+	    };
+	  },
+	  componentWillMount: function componentWillMount() {
+	    this.verifyProps();
+	  },
+	  sort: function sort(column) {
+	    var that = this;
+	    return function (event) {
+	      that.props.sortSettings.changeSort(column);
+	    };
+	  },
+	  toggleSelectAll: function toggleSelectAll(event) {
+	    this.props.multipleSelectionSettings.toggleSelectAll();
+	  },
+	  handleSelectionChange: function handleSelectionChange(event) {
+	    //hack to get around warning message that's not helpful in this case
+	    return;
+	  },
+	  verifyProps: function verifyProps() {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridTitle: The columnSettings prop is null and it shouldn't be");
 	    }
+
+	    if (this.props.sortSettings === null) {
+	      console.error("gridTitle: The sortSettings prop is null and it shouldn't be");
+	    }
+	  },
+	  render: function render() {
+	    this.verifyProps();
+	    var that = this;
+	    var titleStyles = null;
+
+	    var nodes = this.props.columnSettings.getColumns().map(function (col, index) {
+	      var columnSort = "";
+	      var columnIsSortable = that.props.columnSettings.getMetadataColumnProperty(col, "sortable", true);
+	      var sortComponent = columnIsSortable ? that.props.sortSettings.sortDefaultComponent : null;
+
+	      if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending) {
+	        columnSort = that.props.sortSettings.sortAscendingClassName;
+	        sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortAscendingComponent;
+	      } else if (that.props.sortSettings.sortColumn == col && that.props.sortSettings.sortAscending === false) {
+	        columnSort += that.props.sortSettings.sortDescendingClassName;
+	        sortComponent = that.props.useGriddleIcons && that.props.sortSettings.sortDescendingComponent;
+	      }
+
+	      var meta = that.props.columnSettings.getColumnMetadataByName(col);
+	      var displayName = that.props.columnSettings.getMetadataColumnProperty(col, "displayName", col);
+	      var HeaderComponent = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponent", DefaultHeaderComponent);
+	      var headerProps = that.props.columnSettings.getMetadataColumnProperty(col, "customHeaderComponentProps", {});
+
+	      columnSort = meta == null ? columnSort : (columnSort && columnSort + " " || columnSort) + that.props.columnSettings.getMetadataColumnProperty(col, "cssClassName", "");
+
+	      if (that.props.useGriddleStyles) {
+	        titleStyles = {
+	          backgroundColor: "#EDEDEF",
+	          border: "0",
+	          borderBottom: "1px solid #DDD",
+	          color: "#222",
+	          padding: "5px",
+	          cursor: columnIsSortable ? "pointer" : "default"
+	        };
+	      }
+
+	      return React.createElement('th', { onClick: columnIsSortable ? that.sort(col) : null, 'data-title': col, className: columnSort, key: displayName, style: titleStyles }, React.createElement(HeaderComponent, _extends({ columnName: col, displayName: displayName, filterByColumn: that.props.filterByColumn }, headerProps)), sortComponent);
+	    });
+
+	    if (nodes && this.props.multipleSelectionSettings.isMultipleSelection) {
+	      nodes.unshift(React.createElement('th', { key: 'selection', onClick: this.toggleSelectAll, style: titleStyles }, React.createElement('input', { type: 'checkbox', checked: this.props.multipleSelectionSettings.getIsSelectAllChecked(), onChange: this.handleSelectionChange })));
+	    }
+
+	    //Get the row from the row settings.
+	    var className = that.props.rowSettings && that.props.rowSettings.getHeaderRowMetadataClass() || null;
+
+	    return React.createElement('thead', null, React.createElement('tr', {
+	      className: className,
+	      style: this.props.headerStyles }, nodes));
+	  }
 	});
 
 	module.exports = GridTitle;
@@ -1406,7 +1340,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var childrenColumnName = arguments.length <= 2 || arguments[2] === undefined ? "children" : arguments[2];
 	    var columnMetadata = arguments.length <= 3 || arguments[3] === undefined ? [] : arguments[3];
 	    var metadataColumns = arguments.length <= 4 || arguments[4] === undefined ? [] : arguments[4];
-	    var childColumns = arguments.length <= 5 || arguments[5] === undefined ? [] : arguments[5];
 
 	    _classCallCheck(this, ColumnProperties);
 
@@ -1415,7 +1348,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    this.childrenColumnName = childrenColumnName;
 	    this.columnMetadata = columnMetadata;
 	    this.metadataColumns = metadataColumns;
-	    this.childColumns = childColumns;
 	  }
 
 	  _createClass(ColumnProperties, [{
@@ -1476,8 +1408,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: 'getColumns',
 	    value: function getColumns() {
-	      var isChild = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-
 	      //if we didn't set default or filter
 	      var filteredColumns = this.filteredColumns.length === 0 ? this.allColumns : this.filteredColumns;
 
@@ -6780,11 +6710,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var arr = [];
 
 	    var columns = this.props.columnSettings.getColumns();
-	    var childMetadata = this.props.childColumnMetadata != null ? this.props.childColumnMetadata : this.props.columnMetadata;
-	    var childColumns = this.props.childColumns != null ? this.props.childColumns : that.props.columnSettings.getColumns();
-	    var childCustomRowComponent = this.props.childCustomRowComponent != null ? this.props.childCustomRowComponent : null;
-	    var childCustomRowComponentClassName = this.props.childCustomRowComponentClassName;
-	    var childUseCustomRowComponent = this.props.childUseCustomRowComponent; // default will be false if not specified
 
 	    arr.push(React.createElement(this.props.rowSettings.rowComponent, {
 	      useGriddleStyles: this.props.useGriddleStyles,
@@ -6814,17 +6739,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var key = that.props.rowSettings.getRowKey(row, index);
 
 	        if (typeof row["children"] !== "undefined") {
-	          var Griddle = __webpack_require__(1);
-	          return React.createElement('tr', { style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, { isSubGriddle: true, results: [row], columns: childColumns,
-	            tableClassName: that.props.tableClassName, parentRowExpandedClassName: that.props.parentRowExpandedClassName,
+	          var Griddle = that.constructor.Griddle;
+	          return React.createElement('tr', { key: key, style: { paddingLeft: 5 } }, React.createElement('td', { colSpan: that.props.columnSettings.getVisibleColumnCount(), className: 'griddle-parent', style: that.props.useGriddleStyles ? { border: "none", "padding": "0 0 0 5px" } : null }, React.createElement(Griddle, {
+	            rowMetadata: { key: 'id' },
+	            isSubGriddle: true,
+	            results: [row],
+	            columns: that.props.columnSettings.getColumns(),
+	            tableClassName: that.props.tableClassName,
+	            parentRowExpandedClassName: that.props.parentRowExpandedClassName,
 	            parentRowCollapsedClassName: that.props.parentRowCollapsedClassName,
-	            useCustomRowComponent: childUseCustomRowComponent,
-	            customRowComponent: childCustomRowComponent,
-	            customRowComponentClassName: childCustomRowComponentClassName,
-	            showTableHeading: that.props.childShowHeader, showPager: false, columnMetadata: childMetadata,
+	            showTableHeading: false,
+	            showPager: false,
+	            columnMetadata: that.props.columnSettings.columnMetadata,
 	            parentRowExpandedComponent: that.props.parentRowExpandedComponent,
 	            parentRowCollapsedComponent: that.props.parentRowCollapsedComponent,
-	            paddingHeight: that.props.paddingHeight, rowHeight: that.props.rowHeight })));
+	            paddingHeight: that.props.paddingHeight,
+	            rowHeight: that.props.rowHeight
+	          })));
 	        }
 
 	        return React.createElement(that.props.rowSettings.rowComponent, {
@@ -7231,19 +7162,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    getDefaultProps: function getDefaultProps() {
 	        return {
-	            "placeholderText": "",
-	            searchIcon: false
+	            "placeholderText": ""
 	        };
 	    },
 	    handleChange: function handleChange(event) {
 	        this.props.changeFilter(event.target.value);
 	    },
 	    render: function render() {
-	        var searchIcon = null;
-	        if (this.props.searchIcon) {
-	            searchIcon = React.createElement("span", { className: "glyphicon glyphicon-search" });
-	        }
-	        return React.createElement("div", { className: "filter-container" }, React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }), searchIcon);
+	        return React.createElement("div", { className: "filter-container" }, React.createElement("input", { type: "text", name: "filter", placeholder: this.props.placeholderText, className: "form-control", onChange: this.handleChange }));
 	    }
 	});
 
@@ -8996,7 +8922,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    render: function render() {
 	        var that = this;
 
-	        return React.createElement("div", { className: "noDataMessage" }, this.props.noDataMessage);
+	        return React.createElement("div", null, this.props.noDataMessage);
 	    }
 	});
 
@@ -9022,162 +8948,126 @@ return /******/ (function(modules) { // webpackBootstrap
 	var without = __webpack_require__(32);
 
 	var GridRow = React.createClass({
-	    displayName: 'GridRow',
+	  displayName: 'GridRow',
 
-	    getInitialState: function getInitialState() {
-	        return { comparatorStyle: '' };
-	    },
-	    componentWillMount: function componentWillMount() {
-	        var _this = this;
-
-	        var that = this;
-	        var columns = this.props.columnSettings.getColumns();
-
-	        // make sure that all the columns we need have default empty values
-	        // otherwise they will get clipped
-	        var defaults = _.object(columns, []);
-
-	        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	        var dataView = Object.create(this.props.data);
-
-	        _.defaults(dataView, defaults);
-
-	        var data = _.pairs(deep.pick(dataView, columns));
-
-	        var nodes = data.map(function (col, index) {
-
-	            var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
-	            //We want to pass in a meta comparator and if ps
-	            if (meta.hasOwnProperty("comparator")) {
-	                if (meta.comparator(col[1])) {
-	                    _this.setState({ 'comparatorStyle': meta.comparatorStyle });
-	                } else if (_this.state.comparatorStyle.length > 0) {
-	                    _this.setState({ 'comparatorStyle': '' });
-	                }
-	            }
-	        });
-	    },
-	    getDefaultProps: function getDefaultProps() {
-	        return {
-	            "isChildRow": false,
-	            "showChildren": false,
-	            "data": {},
-	            "columnSettings": null,
-	            "rowSettings": null,
-	            "hasChildren": false,
-	            "useGriddleStyles": true,
-	            "useGriddleIcons": true,
-	            "isSubGriddle": false,
-	            "paddingHeight": null,
-	            "rowHeight": null,
-	            "parentRowCollapsedClassName": "parent-row",
-	            "parentRowExpandedClassName": "parent-row expanded",
-	            "parentRowCollapsedComponent": "▶",
-	            "parentRowExpandedComponent": "▼",
-	            "onRowClick": null,
-	            "multipleSelectionSettings": null
-	        };
-	    },
-	    handleClick: function handleClick(e) {
-	        if (this.props.onRowClick !== null && isFunction(this.props.onRowClick)) {
-	            this.props.onRowClick(this, e);
-	        } else if (this.props.hasChildren) {
-	            this.props.toggleChildren();
-	        }
-	    },
-	    handleSelectionChange: function handleSelectionChange(e) {
-	        //hack to get around warning that's not super useful in this case
-	        return;
-	    },
-	    handleSelectClick: function handleSelectClick(e) {
-	        if (this.props.multipleSelectionSettings.isMultipleSelection) {
-	            if (e.target.type === "checkbox") {
-	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
-	            } else {
-	                this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked);
-	            }
-	        }
-	    },
-	    verifyProps: function verifyProps() {
-	        if (this.props.columnSettings === null) {
-	            console.error("gridRow: The columnSettings prop is null and it shouldn't be");
-	        }
-	    },
-	    render: function render() {
-	        var _this2 = this;
-
-	        this.verifyProps();
-	        var that = this;
-	        var columnStyles = null;
-
-	        if (this.props.useGriddleStyles) {
-	            columnStyles = {
-	                margin: "0",
-	                padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
-	                height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
-	                backgroundColor: "#FFF",
-	                borderTopColor: "#DDD",
-	                color: "#222"
-	            };
-	        }
-
-	        var columns = this.props.columnSettings.getColumns();
-
-	        // make sure that all the columns we need have default empty values
-	        // otherwise they will get clipped
-	        var defaultValues = fromPairs(columns, []);
-
-	        // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
-	        var dataView = assign({}, this.props.data);
-
-	        defaults(dataView, defaultValues);
-	        var data = toPairs(deep.pick(dataView, without(columns, 'children')));
-	        var nodes = data.map(function (col, index) {
-	            var returnValue = null;
-	            var meta = _this2.props.columnSettings.getColumnMetadataByName(col[0]);
-
-	            //todo: Make this not as ridiculous looking
-	            var firstColAppend = index === 0 && _this2.props.hasChildren && _this2.props.showChildren === false && _this2.props.useGriddleIcons ? React.createElement('span', { onClick: _this2.props.toggleChildren, className: 'childToggle', style: _this2.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null }, _this2.props.parentRowCollapsedComponent) : index === 0 && _this2.props.hasChildren && _this2.props.showChildren && _this2.props.useGriddleIcons ? React.createElement('span', { onClick: _this2.props.toggleChildren, className: 'childToggle', style: _this2.props.useGriddleStyles ? { fontSize: "10px" } : null }, _this2.props.parentRowExpandedComponent) : "";
-
-	            if (index === 0 && _this2.props.isChildRow && _this2.props.useGriddleStyles) {
-	                columnStyles = assign(columnStyles, { paddingLeft: 10 });
-	            }
-
-	            if (_this2.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
-	                if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
-	                    var customComponent = React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
-	                    returnValue = React.createElement('td', { onClick: _this2.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
-	                } else {
-	                    returnValue = React.createElement('td', { onClick: _this2.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, col[1]);
-	                }
-	            }
-
-	            return returnValue || React.createElement('td', { onClick: _this2.handleClick, key: index, style: columnStyles }, firstColAppend, col[1]);
-	        });
-
-	        if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
-	            var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
-
-	            nodes.unshift(React.createElement('td', { key: 'selection', style: columnStyles }, React.createElement('input', {
-	                type: 'checkbox',
-	                checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
-	                onChange: this.handleSelectionChange,
-	                ref: 'selected' })));
-	        }
-
-	        //Get the row from the row settings.
-	        var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
-
-	        if (that.props.isChildRow) {
-	            className = "child-row";
-	        } else if (that.props.hasChildren) {
-	            className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
-	        }
-	        if (that.state.comparatorStyle.length > 0) {
-	            className += " " + that.state.comparatorStyle;
-	        }
-	        return React.createElement('tr', { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className }, nodes);
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      "isChildRow": false,
+	      "showChildren": false,
+	      "data": {},
+	      "columnSettings": null,
+	      "rowSettings": null,
+	      "hasChildren": false,
+	      "useGriddleStyles": true,
+	      "useGriddleIcons": true,
+	      "isSubGriddle": false,
+	      "paddingHeight": null,
+	      "rowHeight": null,
+	      "parentRowCollapsedClassName": "parent-row",
+	      "parentRowExpandedClassName": "parent-row expanded",
+	      "parentRowCollapsedComponent": "▶",
+	      "parentRowExpandedComponent": "▼",
+	      "onRowClick": null,
+	      "multipleSelectionSettings": null
+	    };
+	  },
+	  handleClick: function handleClick(e) {
+	    if (this.props.onRowClick !== null && isFunction(this.props.onRowClick)) {
+	      this.props.onRowClick(this, e);
+	    } else if (this.props.hasChildren) {
+	      this.props.toggleChildren();
 	    }
+	  },
+	  handleSelectionChange: function handleSelectionChange(e) {
+	    //hack to get around warning that's not super useful in this case
+	    return;
+	  },
+	  handleSelectClick: function handleSelectClick(e) {
+	    if (this.props.multipleSelectionSettings.isMultipleSelection) {
+	      if (e.target.type === "checkbox") {
+	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, this.refs.selected.checked);
+	      } else {
+	        this.props.multipleSelectionSettings.toggleSelectRow(this.props.data, !this.refs.selected.checked);
+	      }
+	    }
+	  },
+	  verifyProps: function verifyProps() {
+	    if (this.props.columnSettings === null) {
+	      console.error("gridRow: The columnSettings prop is null and it shouldn't be");
+	    }
+	  },
+	  render: function render() {
+	    var _this = this;
+
+	    this.verifyProps();
+	    var that = this;
+	    var columnStyles = null;
+
+	    if (this.props.useGriddleStyles) {
+	      columnStyles = {
+	        margin: "0",
+	        padding: that.props.paddingHeight + "px 5px " + that.props.paddingHeight + "px 5px",
+	        height: that.props.rowHeight ? this.props.rowHeight - that.props.paddingHeight * 2 + "px" : null,
+	        backgroundColor: "#FFF",
+	        borderTopColor: "#DDD",
+	        color: "#222"
+	      };
+	    }
+
+	    var columns = this.props.columnSettings.getColumns();
+
+	    // make sure that all the columns we need have default empty values
+	    // otherwise they will get clipped
+	    var defaultValues = fromPairs(columns, []);
+
+	    // creates a 'view' on top the data so we will not alter the original data but will allow us to add default values to missing columns
+	    var dataView = assign({}, this.props.data);
+
+	    defaults(dataView, defaultValues);
+	    var data = toPairs(deep.pick(dataView, without(columns, 'children')));
+	    var nodes = data.map(function (col, index) {
+	      var returnValue = null;
+	      var meta = _this.props.columnSettings.getColumnMetadataByName(col[0]);
+
+	      //todo: Make this not as ridiculous looking
+	      var firstColAppend = index === 0 && _this.props.hasChildren && _this.props.showChildren === false && _this.props.useGriddleIcons ? React.createElement('span', { style: _this.props.useGriddleStyles ? { fontSize: "10px", marginRight: "5px" } : null }, _this.props.parentRowCollapsedComponent) : index === 0 && _this.props.hasChildren && _this.props.showChildren && _this.props.useGriddleIcons ? React.createElement('span', { style: _this.props.useGriddleStyles ? { fontSize: "10px" } : null }, _this.props.parentRowExpandedComponent) : "";
+
+	      if (index === 0 && _this.props.isChildRow && _this.props.useGriddleStyles) {
+	        columnStyles = assign(columnStyles, { paddingLeft: 10 });
+	      }
+
+	      if (_this.props.columnSettings.hasColumnMetadata() && typeof meta !== 'undefined' && meta !== null) {
+	        if (typeof meta.customComponent !== 'undefined' && meta.customComponent !== null) {
+	          var customComponent = React.createElement(meta.customComponent, { data: col[1], rowData: dataView, metadata: meta });
+	          returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, customComponent);
+	        } else {
+	          returnValue = React.createElement('td', { onClick: _this.handleClick, className: meta.cssClassName, key: index, style: columnStyles }, firstColAppend, col[1]);
+	        }
+	      }
+
+	      return returnValue || React.createElement('td', { onClick: _this.handleClick, key: index, style: columnStyles }, firstColAppend, col[1]);
+	    });
+
+	    if (nodes && this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection) {
+	      var selectedRowIds = this.props.multipleSelectionSettings.getSelectedRowIds();
+
+	      nodes.unshift(React.createElement('td', { key: 'selection', style: columnStyles }, React.createElement('input', {
+	        type: 'checkbox',
+	        checked: this.props.multipleSelectionSettings.getIsRowChecked(dataView),
+	        onChange: this.handleSelectionChange,
+	        ref: 'selected' })));
+	    }
+
+	    //Get the row from the row settings.
+	    var className = that.props.rowSettings && that.props.rowSettings.getBodyRowMetadataClass(that.props.data) || "standard-row";
+
+	    if (that.props.isChildRow) {
+	      className = "child-row";
+	    } else if (that.props.hasChildren) {
+	      className = that.props.showChildren ? this.props.parentRowExpandedClassName : this.props.parentRowCollapsedClassName;
+	    }
+	    return React.createElement('tr', { onClick: this.props.multipleSelectionSettings && this.props.multipleSelectionSettings.isMultipleSelection ? this.handleSelectClick : null, className: className }, nodes);
+	  }
 	});
 
 	module.exports = GridRow;

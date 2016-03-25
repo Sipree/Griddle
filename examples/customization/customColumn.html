@@ -10,6 +10,25 @@ var LinkComponent = React.createClass({
   }
 });
 
+var HeaderComponent = React.createClass({
+  textOnClick: function(e) {
+    e.stopPropagation();
+  },
+
+  filterText: function(e) {
+    this.props.filterByColumn(e.target.value, this.props.columnName)
+  },
+
+  render: function(){
+    return (
+      <span>
+        <div><strong style={{color: this.props.color}}>{this.props.displayName}</strong></div>
+        <input type='text' onChange={this.filterText} onClick={this.textOnClick} />
+      </span>
+    );
+  }
+});
+
 var customColumnMetadata = [
 {
   "columnName": "id",
@@ -28,13 +47,17 @@ var customColumnMetadata = [
   "columnName": "city",
   "order": 3,
   "locked": false,
-  "visible": true
+  "visible": true,
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'red' }
 },
 {
   "columnName": "state",
   "order": 4,
   "locked": false,
-  "visible": true
+  "visible": true,
+  "customHeaderComponent": HeaderComponent,
+  "customHeaderComponentProps": { color: 'blue' }
 },
 {
   "columnName": "country",
@@ -56,7 +79,7 @@ var customColumnMetadata = [
 }
 ];
 
-React.render(
+ReactDOM.render(
 <Griddle results={fakeData} columnMetadata={customColumnMetadata} columns={["name", "city", "state", "country"]}/>, document.getElementById('customLink')
 );
 </script>

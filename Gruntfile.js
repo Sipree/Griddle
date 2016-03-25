@@ -19,19 +19,6 @@ module.exports = function(grunt) {
         url: 'http://localhost:<%= connect.server.options.port %>/docs/html/'
       }
     },
-    react: {
-      dynamic_mappings: {
-        files: [
-          {
-            expand: true,
-            cwd: 'compiled/',
-            src: ['**/*.jsx'],
-            dest: 'modules/',
-            ext: '.jsx.js'
-          }
-        ]
-      }
-    },
     jshint: {
       all: {
         src: ['Gruntfile.js', 'scripts/**/*.jsx', 'scripts/**/*.js'],
@@ -114,13 +101,11 @@ module.exports = function(grunt) {
         },
         module: {
           loaders: [
-            {test: /\.jsx$/, loader: 'jsx'}
+            {test: /\.jsx$/, loader: 'babel'}
           ]
         },
         externals: {
-          "react": "React",
-          "underscore": "_",
-
+          "react": "React"
         }
       },
       docs: {
@@ -139,18 +124,18 @@ module.exports = function(grunt) {
           extensions: ['', '.js', '.jsx']
         },
         module: {
-          loaders: [
-            {test: /\.jsx$/, loader: 'jsx'}
-          ]
+          loaders: [{
+            test: /\.jsx?$/,
+            loader: 'babel',
+          }]
         },
         externals: {
           "react": "React",
-          "underscore": "_",
           "Chartist": "chartist"
         }
       }
     },
-    "6to5": {
+    "babel": {
       options: {
         sourceMap: false
       },
@@ -161,6 +146,17 @@ module.exports = function(grunt) {
             src: ['**/*.js', '**/*.jsx'],
             dest: 'compiled/'
           }]
+      },
+      dynamic_mappings: {
+        files: [
+          {
+            expand: true,
+            cwd: 'compiled/',
+            src: ['**/*.jsx'],
+            dest: 'modules/',
+            ext: '.jsx.js'
+          }
+        ]
       }
     },
     watch: {
@@ -180,13 +176,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-react');
   grunt.loadNpmTasks('grunt-jsxhint');
   grunt.loadNpmTasks('grunt-webpack');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-markdown');
   grunt.loadNpmTasks('grunt-include-replace');
-  grunt.loadNpmTasks('grunt-6to5'); 
+  grunt.loadNpmTasks('grunt-babel');
 
   grunt.registerTask('serve', function (target) {
     grunt.task.run([
@@ -204,11 +199,11 @@ module.exports = function(grunt) {
       'markdown',
       'clean:includes',
       'clean:compiled',
-      '6to5',
+      'babel:build',
       'webpack:docs',
       'webpack:default',
       'copy',
-      'react',
+      'babel:dynamic_mappings',
       'clean:compiled'
     ]);
   })

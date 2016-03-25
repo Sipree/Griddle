@@ -1,6 +1,9 @@
-"use strict";
+'use strict';
 
-var _ = require("underscore");
+var forEach = require('lodash.foreach');
+var isObject = require('lodash.isobject');
+var isArray = require('lodash.isarray');
+var isFunction = require('lodash.isfunction');
 
 // Credits: https://github.com/documentcloud/underscore-contrib
 // Sub module: underscore.object.selectors
@@ -86,9 +89,9 @@ function powerPick(object, keys) {
 function getKeys(obj, prefix) {
   var keys = [];
 
-  _.each(obj, function (value, key) {
+  forEach(obj, function (value, key) {
     var fullKey = prefix ? prefix + "." + key : key;
-    if (_.isObject(value) && !_.isArray(value) && !_.isFunction(value)) {
+    if (isObject(value) && !isArray(value) && !isFunction(value)) {
       keys = keys.concat(getKeys(value, fullKey));
     } else {
       keys.push(fullKey);
